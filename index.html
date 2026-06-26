@@ -1,0 +1,1073 @@
+<html lang="es"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Avanty Services – Cuestionario del Cliente</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#FDFCFA;color:#1F2937;font-size:15px}
+
+/* LANG BAR */
+#lang-bar{background:#1F2937;padding:8px 16px;display:flex;justify-content:flex-end;gap:8px}
+#lang-bar button{background:transparent;border:1px solid #C9A84C;color:#C9A84C;padding:4px 14px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:600}
+#lang-bar button.active{background:#C9A84C;color:#1F2937}
+
+/* HEADER */
+.header{background:#8B1A1A;padding:18px 20px;display:flex;align-items:center;gap:14px}
+.logo-wrap{background:#fff;border-radius:8px;padding:6px 10px;display:flex;align-items:center}
+.logo-svg{width:36px;height:36px}
+.logo-text{line-height:1.1}
+.logo-text span{display:block;font-weight:700;font-size:12px;color:#8B1A1A}
+.logo-text small{font-size:9px;color:#C9A84C;font-weight:600}
+.header-title{color:#fff}
+.header-title h1{font-size:18px;font-weight:700}
+.header-title p{font-size:12px;color:#C9A84C;margin-top:2px}
+
+/* PROGRESS */
+.progress-wrap{padding:14px 16px;background:#fff;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:100}
+.progress-label{font-size:12px;color:#6B7280;margin-bottom:6px}
+.progress-bar{height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:#8B1A1A;border-radius:3px;transition:width .3s}
+.step-dots{display:flex;justify-content:space-between;margin-top:8px}
+.dot{width:22px;height:22px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#6B7280;cursor:pointer;transition:all .2s}
+.dot.done{background:#8B1A1A;color:#fff}
+.dot.current{background:#C9A84C;color:#1F2937}
+
+/* SECTIONS */
+.section{display:none;padding:16px;animation:fadeIn .3s}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-size:17px;font-weight:700;color:#8B1A1A;margin-bottom:4px;padding-bottom:8px;border-bottom:2px solid #C9A84C}
+.section-sub{font-size:12px;color:#6B7280;margin-bottom:14px}
+
+/* FIELDS */
+.field{margin-bottom:14px}
+label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:4px}
+input[type=text],input[type=email],input[type=tel],input[type=number],select,textarea{
+  width:100%;padding:10px 12px;border:1.5px solid #D1D5DB;border-radius:8px;
+  font-size:14px;background:#fff;color:#1F2937;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#8B1A1A}
+textarea{resize:vertical;min-height:80px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+
+/* DATE ROW */
+.date-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.date-row select{padding:10px 8px;font-size:13px}
+
+/* RADIO / CHECK */
+.options{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.opt{display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 12px;border:1.5px solid #D1D5DB;border-radius:8px;font-size:13px;transition:all .2s;background:#fff}
+.opt input{accent-color:#8B1A1A;width:16px;height:16px}
+.opt:has(input:checked){border-color:#8B1A1A;background:#FFF5F5}
+.check-opt{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:13px;cursor:pointer}
+.check-opt input{accent-color:#8B1A1A;width:16px;height:16px}
+
+/* SUBSECTION */
+.subsec{background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px;margin-bottom:14px}
+.subsec-title{font-size:13px;font-weight:700;color:#8B1A1A;margin-bottom:10px}
+
+/* DEPENDENT */
+.dep-card{background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;padding:12px;margin-bottom:10px;position:relative}
+.dep-card .dep-num{font-size:12px;font-weight:700;color:#C9A84C;margin-bottom:8px}
+.btn-add-dep{background:transparent;border:1.5px dashed #8B1A1A;color:#8B1A1A;padding:9px;border-radius:8px;width:100%;cursor:pointer;font-size:13px;font-weight:600;margin-bottom:14px}
+.btn-rm{position:absolute;top:8px;right:8px;background:#fee2e2;border:none;color:#DC2626;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer}
+
+/* SIGNATURE */
+#sigCanvas{border:2px solid #D1D5DB;border-radius:8px;background:#fff;touch-action:none;width:100%;height:140px}
+.sig-actions{display:flex;gap:8px;margin-top:6px}
+.btn-clear{background:#f3f4f6;border:1px solid #D1D5DB;color:#374151;padding:7px 14px;border-radius:7px;font-size:13px;cursor:pointer}
+
+/* NAVIGATION */
+.nav{display:flex;gap:10px;margin-top:20px}
+.btn-back{flex:1;background:#f3f4f6;border:1.5px solid #D1D5DB;color:#374151;padding:13px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+.btn-next{flex:2;background:#8B1A1A;border:none;color:#fff;padding:13px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer}
+.btn-next:hover{background:#6B1414}
+.btn-submit{flex:2;background:#C9A84C;border:none;color:#1F2937;padding:13px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer}
+
+/* SUCCESS */
+#success{display:none;padding:24px 16px;text-align:center}
+#success.show{display:block}
+.success-icon{font-size:56px;margin-bottom:12px}
+.success-num{background:#8B1A1A;color:#fff;display:inline-block;padding:8px 20px;border-radius:20px;font-weight:700;font-size:16px;margin:10px 0}
+.print-btns{display:flex;gap:10px;margin-top:16px;justify-content:center}
+.btn-print,.btn-pdf{padding:12px 20px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none}
+.btn-print{background:#8B1A1A;color:#fff}
+.btn-pdf{background:#C9A84C;color:#1F2937}
+
+/* FLOAT BAR */
+#float-bar{position:fixed;bottom:16px;right:16px;display:none;flex-direction:column;gap:8px;z-index:200}
+#float-bar button{width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.fb-print{background:#8B1A1A;color:#fff}
+.fb-pdf{background:#C9A84C;color:#1F2937}
+
+/* ERROR */
+.err{color:#DC2626;font-size:12px;margin-top:3px;display:none}
+
+@media print{
+  #lang-bar,#float-bar,.nav,.progress-wrap{display:none!important}
+  .section{display:block!important}
+  .section-title{color:#8B1A1A!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script></head>
+<body data-new-gr-c-s-check-loaded="14.1306.0" data-gr-ext-installed="">
+
+<!-- LANG BAR -->
+<div id="lang-bar">
+  <button id="btn-es" class="active" onclick="setLang('es')">Español</button>
+  <button id="btn-en" onclick="setLang('en')">English</button>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-wrap">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNDIwIiB3aWR0aD0iOTAwIiBoZWlnaHQ9IjQyMCI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImdvbGRHcmFkIiBjeD0iMzglIiBjeT0iMjglIiByPSI2NSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRjBEODcwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjQzlBODRDIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzhBNjAxOCIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjkwMCIgaGVpZ2h0PSI0MjAiIGZpbGw9IndoaXRlIi8+CgogIDwhLS0gTk8gQVJDIOKAlCByZW1vdmVkIGNvbXBsZXRlbHkgLS0+CgogIDwhLS0gNyBDUklNU09OIFBFVEFMUzogMMKwLDkwwrAsMTM1wrAsMTgwwrAsMjI1wrAsMjcwwrAsMzE1wrAg4oCUIGdhcCBhdCA0NcKwICh0b3AtcmlnaHQpIC0tPgogIDxwYXRoIGQ9Ik0gMjEwLDE4NiBDIDE5MCwxNjMgMTc1LDEyNCAxNzUsOTIgQyAxNzUsNjIgMjQ1LDYyIDI0NSw5MiBDIDI0NSwxMjQgMjMwLDE2MyAyMTAsMTg2IFoiCiAgICAgICAgZmlsbD0iIzhCMUExQSIgdHJhbnNmb3JtPSJyb3RhdGUoMCwyMTAsMjEwKSIvPgogIDxwYXRoIGQ9Ik0gMjEwLDE4NiBDIDE5MCwxNjMgMTc1LDEyNCAxNzUsOTIgQyAxNzUsNjIgMjQ1LDYyIDI0NSw5MiBDIDI0NSwxMjQgMjMwLDE2MyAyMTAsMTg2IFoiCiAgICAgICAgZmlsbD0iIzhCMUExQSIgdHJhbnNmb3JtPSJyb3RhdGUoOTAsMjEwLDIxMCkiLz4KICA8cGF0aCBkPSJNIDIxMCwxODYgQyAxOTAsMTYzIDE3NSwxMjQgMTc1LDkyIEMgMTc1LDYyIDI0NSw2MiAyNDUsOTIgQyAyNDUsMTI0IDIzMCwxNjMgMjEwLDE4NiBaIgogICAgICAgIGZpbGw9IiM4QjFBMUEiIHRyYW5zZm9ybT0icm90YXRlKDEzNSwyMTAsMjEwKSIvPgogIDxwYXRoIGQ9Ik0gMjEwLDE4NiBDIDE5MCwxNjMgMTc1LDEyNCAxNzUsOTIgQyAxNzUsNjIgMjQ1LDYyIDI0NSw5MiBDIDI0NSwxMjQgMjMwLDE2MyAyMTAsMTg2IFoiCiAgICAgICAgZmlsbD0iIzhCMUExQSIgdHJhbnNmb3JtPSJyb3RhdGUoMTgwLDIxMCwyMTApIi8+CiAgPHBhdGggZD0iTSAyMTAsMTg2IEMgMTkwLDE2MyAxNzUsMTI0IDE3NSw5MiBDIDE3NSw2MiAyNDUsNjIgMjQ1LDkyIEMgMjQ1LDEyNCAyMzAsMTYzIDIxMCwxODYgWiIKICAgICAgICBmaWxsPSIjOEIxQTFBIiB0cmFuc2Zvcm09InJvdGF0ZSgyMjUsMjEwLDIxMCkiLz4KICA8cGF0aCBkPSJNIDIxMCwxODYgQyAxOTAsMTYzIDE3NSwxMjQgMTc1LDkyIEMgMTc1LDYyIDI0NSw2MiAyNDUsOTIgQyAyNDUsMTI0IDIzMCwxNjMgMjEwLDE4NiBaIgogICAgICAgIGZpbGw9IiM4QjFBMUEiIHRyYW5zZm9ybT0icm90YXRlKDI3MCwyMTAsMjEwKSIvPgogIDxwYXRoIGQ9Ik0gMjEwLDE4NiBDIDE5MCwxNjMgMTc1LDEyNCAxNzUsOTIgQyAxNzUsNjIgMjQ1LDYyIDI0NSw5MiBDIDI0NSwxMjQgMjMwLDE2MyAyMTAsMTg2IFoiCiAgICAgICAgZmlsbD0iIzhCMUExQSIgdHJhbnNmb3JtPSJyb3RhdGUoMzE1LDIxMCwyMTApIi8+CgogIDwhLS0gV2hpdGUgY2VudGVyIC0tPgogIDxjaXJjbGUgY3g9IjIxMCIgY3k9IjIxMCIgcj0iMTciIGZpbGw9IndoaXRlIi8+CgogIDwhLS0gR09MRCBQRVRBTCBhdCA0NcKwICh0b3AtUklHSFQpLCBvZmZzZXQgMTRweCBvdXR3YXJkIC0tPgogIDxwYXRoIGQ9Ik0gMjEwLDE4NiBDIDE5MCwxNjMgMTc1LDEyNCAxNzUsOTIgQyAxNzUsNjIgMjQ1LDYyIDI0NSw5MiBDIDI0NSwxMjQgMjMwLDE2MyAyMTAsMTg2IFoiCiAgICAgICAgZmlsbD0idXJsKCNnb2xkR3JhZCkiIHRyYW5zZm9ybT0icm90YXRlKDQ1LDIxMCwyMTApIHRyYW5zbGF0ZSgwLC0xNCkiLz4KCiAgPCEtLSBURVhUIC0tPgogIDx0ZXh0IHg9IjM3OCIgeT0iMTg4IgogICAgICAgIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCdUaW1lcyBOZXcgUm9tYW4nLHNlcmlmIgogICAgICAgIGZvbnQtc2l6ZT0iOTAiIGZvbnQtd2VpZ2h0PSJib2xkIgogICAgICAgIGZpbGw9IiM4QjFBMUEiIGxldHRlci1zcGFjaW5nPSI0Ij5BVkFOVFk8L3RleHQ+CiAgPGxpbmUgeDE9IjM3OCIgeTE9IjIxNiIgeDI9IjQ1MiIgeTI9IjIxNiIgc3Ryb2tlPSIjQzlBODRDIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDxsaW5lIHgxPSI2NzIiIHkxPSIyMTYiIHgyPSI3NDgiIHkyPSIyMTYiIHN0cm9rZT0iI0M5QTg0QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8dGV4dCB4PSI1NjIiIHk9IjIzMiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsJ1RpbWVzIE5ldyBSb21hbicsc2VyaWYiCiAgICAgICAgZm9udC1zaXplPSIyNyIgZmlsbD0iIzY2NjY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjExIj5TRVJWSUNFUzwvdGV4dD4KICA8bGluZSB4MT0iMzk1IiB5MT0iMjcwIiB4Mj0iNDU4IiB5Mj0iMjcwIiBzdHJva2U9IiNDOUE4NEMiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjY2NCIgeTE9IjI3MCIgeDI9IjcyOCIgeTI9IjI3MCIgc3Ryb2tlPSIjQzlBODRDIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDx0ZXh0IHg9IjU2MiIgeT0iMjg0IiBmb250LWZhbWlseT0iR2VvcmdpYSwnVGltZXMgTmV3IFJvbWFuJyxzZXJpZiIKICAgICAgICBmb250LXNpemU9IjIwIiBmaWxsPSIjQzlBODRDIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIgogICAgICAgIGxldHRlci1zcGFjaW5nPSI2IiBmb250LXdlaWdodD0iYm9sZCI+U0lOQ0UgMjAwNDwvdGV4dD4KPC9zdmc+Cg==" alt="Avanty Services" style="height:60px;width:auto;display:block;">
+  </div>
+  <div class="header-title">
+    <h1 id="h-title">Cuestionario del Cliente</h1>
+    <p id="h-sub">T.M. Financial Services LLC</p>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap" id="prog-wrap">
+  <div class="progress-label"><span id="prog-text">Sección 1 / 8</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:12.5%"></div></div>
+  <div class="step-dots" id="step-dots">
+    <div class="dot current" onclick="goTo(1)">1</div>
+    <div class="dot" onclick="goTo(2)">2</div>
+    <div class="dot" onclick="goTo(3)">3</div>
+    <div class="dot" onclick="goTo(4)">4</div>
+    <div class="dot" onclick="goTo(5)">5</div>
+    <div class="dot" onclick="goTo(6)">6</div>
+    <div class="dot" onclick="goTo(7)">7</div>
+    <div class="dot" onclick="goTo(8)">8</div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: INFO PERSONAL ===== -->
+<div class="section active" id="step-1">
+  <div class="section-title" id="s1-title">1. Información Personal</div>
+  <div class="section-sub" id="s1-sub">Complete todos los campos requeridos *</div>
+
+  <div class="field">
+    <label id="l-fname">Nombre *</label>
+    <input type="text" id="fname" placeholder="Nombre(s)">
+  </div>
+  <div class="field">
+    <label id="l-lname">Apellido(s) *</label>
+    <input type="text" id="lname" placeholder="Apellido(s)">
+  </div>
+  <div class="field">
+    <label id="l-ssn">SSN / ITIN *</label>
+    <input type="text" id="ssn" placeholder="XXX-XX-XXXX" maxlength="11">
+  </div>
+  <div class="field">
+    <label id="l-dob">Fecha de Nacimiento *</label>
+    <div class="date-row">
+      <select id="dob-m"><option value="">Mes</option>
+        <option>01</option><option>02</option><option>03</option><option>04</option>
+        <option>05</option><option>06</option><option>07</option><option>08</option>
+        <option>09</option><option>10</option><option>11</option><option>12</option>
+      </select>
+      <select id="dob-d"><option value="">Día</option></select>
+      <select id="dob-y"><option value="">Año</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option><option>2017</option><option>2016</option><option>2015</option><option>2014</option><option>2013</option><option>2012</option><option>2011</option><option>2010</option><option>2009</option><option>2008</option><option>2007</option><option>2006</option><option>2005</option><option>2004</option><option>2003</option><option>2002</option><option>2001</option><option>2000</option><option>1999</option><option>1998</option><option>1997</option><option>1996</option><option>1995</option><option>1994</option><option>1993</option><option>1992</option><option>1991</option><option>1990</option><option>1989</option><option>1988</option><option>1987</option><option>1986</option><option>1985</option><option>1984</option><option>1983</option><option>1982</option><option>1981</option><option>1980</option><option>1979</option><option>1978</option><option>1977</option><option>1976</option><option>1975</option><option>1974</option><option>1973</option><option>1972</option><option>1971</option><option>1970</option><option>1969</option><option>1968</option><option>1967</option><option>1966</option><option>1965</option><option>1964</option><option>1963</option><option>1962</option><option>1961</option><option>1960</option><option>1959</option><option>1958</option><option>1957</option><option>1956</option><option>1955</option><option>1954</option><option>1953</option><option>1952</option><option>1951</option><option>1950</option><option>1949</option><option>1948</option><option>1947</option><option>1946</option><option>1945</option><option>1944</option><option>1943</option><option>1942</option><option>1941</option><option>1940</option><option>1939</option><option>1938</option><option>1937</option><option>1936</option><option>1935</option><option>1934</option><option>1933</option><option>1932</option><option>1931</option><option>1930</option></select>
+    </div>
+  </div>
+  <div class="field">
+    <label id="l-phone">Teléfono *</label>
+    <input type="tel" id="phone" placeholder="(818) 000-0000">
+  </div>
+  <div class="field">
+    <label id="l-email">Correo Electrónico</label>
+    <input type="email" id="email" placeholder="correo@email.com">
+  </div>
+  <div class="field">
+    <label id="l-address">Dirección *</label>
+    <input type="text" id="address" placeholder="Calle y número">
+  </div>
+  <div class="row2">
+    <div class="field"><label id="l-city">Ciudad *</label><input type="text" id="city"></div>
+    <div class="field"><label id="l-state">Estado *</label>
+      <select id="state">
+        <option value="">—</option>
+        <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
+        <option selected="">CA</option><option>CO</option><option>CT</option><option>DE</option>
+        <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
+        <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
+        <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+        <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
+        <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
+        <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
+        <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
+        <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+        <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
+        <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
+        <option>WI</option><option>WY</option>
+      </select>
+    </div>
+  </div>
+  <div class="field"><label id="l-zip">ZIP *</label><input type="text" id="zip" maxlength="5" placeholder="91234"></div>
+  <div class="field">
+    <label id="l-filing">Estado Civil / Filing Status *</label>
+    <div class="options">
+      <label class="opt"><input type="radio" name="filing" value="Single"> <span id="o-single">Soltero(a)</span></label>
+      <label class="opt"><input type="radio" name="filing" value="MFJ"> <span id="o-mfj">Casado(a) Conjunto</span></label>
+      <label class="opt"><input type="radio" name="filing" value="MFS"> <span id="o-mfs">Casado(a) Separado</span></label>
+      <label class="opt"><input type="radio" name="filing" value="HH"> <span id="o-hh">Jefe de Familia</span></label>
+      <label class="opt"><input type="radio" name="filing" value="QW"> <span id="o-qw">Viudo(a) Calificado</span></label>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="btn-next" onclick="next(1)"><span id="btn-next1">Siguiente →</span></button>
+  </div>
+</div>
+
+<!-- ===== SECTION 2: HISTORIAL FISCAL ===== -->
+<div class="section" id="step-2">
+  <div class="section-title" id="s2-title">2. Historial Fiscal</div>
+  <div class="section-sub" id="s2-sub">Información sobre años anteriores</div>
+
+  <div class="field">
+    <label id="l-taxyear">Año fiscal a preparar *</label>
+    <select id="taxyear">
+      <option>2024</option><option>2023</option><option>2022</option>
+      <option>2021</option><option>2020</option>
+    </select>
+  </div>
+  <div class="field">
+    <label id="l-filed-before">¿Ha presentado impuestos antes?</label>
+    <div class="options">
+      <label class="opt"><input type="radio" name="filed" value="si"> <span id="o-yes">Sí</span></label>
+      <label class="opt"><input type="radio" name="filed" value="no"> <span id="o-no">No</span></label>
+    </div>
+  </div>
+  <div class="field">
+    <label id="l-prev-preparer">¿Quién preparó sus impuestos el año pasado?</label>
+    <input type="text" id="prev-preparer" placeholder="Nombre / empresa">
+  </div>
+  <div class="field">
+    <label id="l-owe">¿Tuvo balance a deber o a favor el año pasado?</label>
+    <div class="options">
+      <label class="opt"><input type="radio" name="owe" value="deber"> <span id="o-owe">A deber</span></label>
+      <label class="opt"><input type="radio" name="owe" value="favor"> <span id="o-refund">A favor / Reembolso</span></label>
+      <label class="opt"><input type="radio" name="owe" value="cero"> <span id="o-zero">$0</span></label>
+      <label class="opt"><input type="radio" name="owe" value="nose"> <span id="o-dontknow">No sé</span></label>
+    </div>
+  </div>
+  <div class="field">
+    <label id="l-irs-letters">¿Recibió cartas del IRS o FTB este año?</label>
+    <div class="options">
+      <label class="opt"><input type="radio" name="irs" value="si"> <span>Sí</span></label>
+      <label class="opt"><input type="radio" name="irs" value="no"> <span>No</span></label>
+    </div>
+  </div>
+  <div class="field">
+    <label id="l-irs-detail">Si recibió cartas, explique brevemente:</label>
+    <textarea id="irs-detail" placeholder="Tipo de carta, número de carta, año..."></textarea>
+  </div>
+  <div class="nav">
+    <button class="btn-back" onclick="back(2)"><span id="btn-back2">← Atrás</span></button>
+    <button class="btn-next" onclick="next(2)"><span id="btn-next2">Siguiente →</span></button>
+  </div>
+</div>
+
+<!-- ===== SECTION 3: CÓNYUGE Y DEPENDIENTES ===== -->
+<div class="section" id="step-3">
+  <div class="section-title" id="s3-title">3. Cónyuge y Dependientes</div>
+  <div class="section-sub" id="s3-sub">Si aplica</div>
+
+  <div class="subsec" id="spouse-sec">
+    <div class="subsec-title" id="ss-spouse">Información del Cónyuge</div>
+    <div class="field"><label id="l-spname">Nombre completo</label><input type="text" id="sp-name"></div>
+    <div class="field"><label id="l-spssn">SSN / ITIN del cónyuge</label><input type="text" id="sp-ssn" placeholder="XXX-XX-XXXX" maxlength="11"></div>
+    <div class="field">
+      <label id="l-spdob">Fecha de nacimiento</label>
+      <div class="date-row">
+        <select id="sp-dob-m"><option value="">Mes</option>
+          <option>01</option><option>02</option><option>03</option><option>04</option>
+          <option>05</option><option>06</option><option>07</option><option>08</option>
+          <option>09</option><option>10</option><option>11</option><option>12</option>
+        </select>
+        <select id="sp-dob-d"><option value="">Día</option></select>
+        <select id="sp-dob-y"><option value="">Año</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option><option>2017</option><option>2016</option><option>2015</option><option>2014</option><option>2013</option><option>2012</option><option>2011</option><option>2010</option><option>2009</option><option>2008</option><option>2007</option><option>2006</option><option>2005</option><option>2004</option><option>2003</option><option>2002</option><option>2001</option><option>2000</option><option>1999</option><option>1998</option><option>1997</option><option>1996</option><option>1995</option><option>1994</option><option>1993</option><option>1992</option><option>1991</option><option>1990</option><option>1989</option><option>1988</option><option>1987</option><option>1986</option><option>1985</option><option>1984</option><option>1983</option><option>1982</option><option>1981</option><option>1980</option><option>1979</option><option>1978</option><option>1977</option><option>1976</option><option>1975</option><option>1974</option><option>1973</option><option>1972</option><option>1971</option><option>1970</option><option>1969</option><option>1968</option><option>1967</option><option>1966</option><option>1965</option><option>1964</option><option>1963</option><option>1962</option><option>1961</option><option>1960</option><option>1959</option><option>1958</option><option>1957</option><option>1956</option><option>1955</option><option>1954</option><option>1953</option><option>1952</option><option>1951</option><option>1950</option><option>1949</option><option>1948</option><option>1947</option><option>1946</option><option>1945</option><option>1944</option><option>1943</option><option>1942</option><option>1941</option><option>1940</option><option>1939</option><option>1938</option><option>1937</option><option>1936</option><option>1935</option><option>1934</option><option>1933</option><option>1932</option><option>1931</option><option>1930</option></select>
+      </div>
+    </div>
+    <div class="field"><label id="l-spemail">Email del cónyuge</label><input type="email" id="sp-email"></div>
+  </div>
+
+  <div id="deps-wrap">
+    <div class="subsec-title" id="ss-deps" style="margin-bottom:10px">Dependientes</div>
+    <div id="dep-list"></div>
+    <button class="btn-add-dep" onclick="addDep()" id="btn-add-dep">+ Agregar Dependiente</button>
+  </div>
+
+  <div class="nav">
+    <button class="btn-back" onclick="back(3)"><span id="btn-back3">← Atrás</span></button>
+    <button class="btn-next" onclick="next(3)"><span id="btn-next3">Siguiente →</span></button>
+  </div>
+</div>
+
+<!-- ===== SECTION 4: INGRESOS ===== -->
+<div class="section" id="step-4">
+  <div class="section-title" id="s4-title">4. Ingresos</div>
+  <div class="section-sub" id="s4-sub">Seleccione todas las fuentes que apliquen</div>
+
+  <div class="field">
+    <label id="l-income-types">Tipos de ingresos recibidos en el año:</label>
+    <div style="margin-top:8px">
+      <label class="check-opt"><input type="checkbox" id="inc-w2"> <span id="o-w2">W-2 (empleado)</span></label>
+      <label class="check-opt"><input type="checkbox" id="inc-1099nec"> <span id="o-1099nec">1099-NEC (contratista independiente)</span></label>
+      <label class="check-opt"><input type="checkbox" id="inc-1099misc"> <span id="o-1099misc">1099-MISC</span></label>
+      <label class="check-opt"><input type="checkbox" id="inc-1099g"> <span id="o-1099g">1099-G (desempleo / reembolso estatal)</span></label>
+      <label class="check-opt"><input type="checkbox" id="inc-1099r"> <span id="o-1099r">1099-R (pensión / retiro)</span></label>
+      <label class="check-opt"><input type="checkbox" id="inc-ssa"> <span id="o-ssa">SSA-1099 (Seguro Social)</span></label>
+      <label class="check-opt"><input type="checkbox" id="inc-rent"> <span id="o-rent">Ingresos por renta</span></label>
+      <label class="check-opt"><input type="checkbox" id="inc-biz"> <span id="o-biz">Negocio propio (Schedule C)</span></label>
+      <label class="check-opt"><input type="checkbox" id="inc-invest"> <span id="o-invest">Inversiones / dividendos (1099-DIV / 1099-INT)</span></label>
+      <label class="check-opt"><input type="checkbox" id="inc-crypto"> <span id="o-crypto">Criptomonedas</span></label>
+      <label class="check-opt"><input type="checkbox" id="inc-other"> <span id="o-other-inc">Otros ingresos</span></label>
+    </div>
+  </div>
+  <div class="field">
+    <label id="l-other-inc">Especifique otros ingresos:</label>
+    <input type="text" id="other-inc-detail">
+  </div>
+  <div class="field">
+    <label id="l-employers">Nombre(s) de empleadores / pagadores principales:</label>
+    <textarea id="employers" placeholder="Empresa 1, Empresa 2..."></textarea>
+  </div>
+  <div class="nav">
+    <button class="btn-back" onclick="back(4)"><span id="btn-back4">← Atrás</span></button>
+    <button class="btn-next" onclick="next(4)"><span id="btn-next4">Siguiente →</span></button>
+  </div>
+</div>
+
+<!-- ===== SECTION 5: DEDUCCIONES ===== -->
+<div class="section" id="step-5">
+  <div class="section-title" id="s5-title">5. Deducciones y Créditos</div>
+  <div class="section-sub" id="s5-sub">Seleccione todo lo que aplique</div>
+
+  <div class="field">
+    <label id="l-ded">Deducciones / situaciones especiales:</label>
+    <div style="margin-top:8px">
+      <label class="check-opt"><input type="checkbox" id="ded-mortgage"> <span id="o-mortgage">Intereses de hipoteca (Form 1098)</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-charity"> <span id="o-charity">Donaciones de caridad</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-student"> <span id="o-student">Préstamo estudiantil (Form 1098-E)</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-hsa"> <span id="o-hsa">HSA / MSA (Form 1099-SA)</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-ira"> <span id="o-ira">Aportación a IRA / 401k</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-edu"> <span id="o-edu">Gastos de educación (Form 1098-T)</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-biz-exp"> <span id="o-biz-exp">Gastos de negocio propio</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-home-off"> <span id="o-home-off">Oficina en casa</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-vehicle"> <span id="o-vehicle">Uso del vehículo para trabajo</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-childcare"> <span id="o-childcare">Gastos de cuidado de hijos (Form 2441)</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-energy"> <span id="o-energy">Mejoras de energía en hogar</span></label>
+      <label class="check-opt"><input type="checkbox" id="ded-alimony"> <span id="o-alimony">Pensión alimenticia pagada</span></label>
+    </div>
+  </div>
+  <div class="field">
+    <label id="l-notes-ded">Notas adicionales sobre deducciones:</label>
+    <textarea id="notes-ded" placeholder="Detalles adicionales..."></textarea>
+  </div>
+  <div class="nav">
+    <button class="btn-back" onclick="back(5)"><span id="btn-back5">← Atrás</span></button>
+    <button class="btn-next" onclick="next(5)"><span id="btn-next5">Siguiente →</span></button>
+  </div>
+</div>
+
+<!-- ===== SECTION 6: ESTATUS MIGRATORIO ===== -->
+<div class="section" id="step-6">
+  <div class="section-title" id="s6-title">6. Estatus Migratorio</div>
+  <div class="section-sub" id="s6-sub">Esta información es confidencial</div>
+
+  <div class="field">
+    <label id="l-citizen">Estatus migratorio *</label>
+    <div class="options" style="flex-direction:column">
+      <label class="opt"><input type="radio" name="citizen" value="citizen"> <span id="o-citizen">Ciudadano(a) americano(a)</span></label>
+      <label class="opt"><input type="radio" name="citizen" value="pr"> <span id="o-pr">Residente Permanente (Green Card)</span></label>
+      <label class="opt"><input type="radio" name="citizen" value="visa"> <span id="o-visa">Visa de trabajo (H1B, L1, O1, etc.)</span></label>
+      <label class="opt"><input type="radio" name="citizen" value="itin"> <span id="o-itin">ITIN / Sin estatus legal</span></label>
+      <label class="opt"><input type="radio" name="citizen" value="other"> <span id="o-other-cit">Otro</span></label>
+    </div>
+  </div>
+  <div class="field">
+    <label id="l-foreign-income">¿Tuvo ingresos fuera de EE.UU. este año?</label>
+    <div class="options">
+      <label class="opt"><input type="radio" name="foreign" value="si"> <span>Sí</span></label>
+      <label class="opt"><input type="radio" name="foreign" value="no"> <span>No</span></label>
+    </div>
+  </div>
+  <div class="field">
+    <label id="l-foreign-accounts">¿Tiene cuentas bancarias fuera de EE.UU.?</label>
+    <div class="options">
+      <label class="opt"><input type="radio" name="fbar" value="si"> <span>Sí</span></label>
+      <label class="opt"><input type="radio" name="fbar" value="no"> <span>No</span></label>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="btn-back" onclick="back(6)"><span id="btn-back6">← Atrás</span></button>
+    <button class="btn-next" onclick="next(6)"><span id="btn-next6">Siguiente →</span></button>
+  </div>
+</div>
+
+<!-- ===== SECTION 7: DOCUMENTOS Y DEPÓSITO ===== -->
+<div class="section" id="step-7">
+  <div class="section-title" id="s7-title">7. Documentos y Depósito Directo</div>
+  <div class="section-sub" id="s7-sub">Marque los documentos que trae / enviará</div>
+
+  <div class="field">
+    <label id="l-docs">Documentos disponibles:</label>
+    <div style="margin-top:8px">
+      <label class="check-opt"><input type="checkbox" id="doc-w2"> <span>W-2(s)</span></label>
+      <label class="check-opt"><input type="checkbox" id="doc-1099"> <span>1099(s)</span></label>
+      <label class="check-opt"><input type="checkbox" id="doc-id"> <span id="o-doc-id">Identificación con foto</span></label>
+      <label class="check-opt"><input type="checkbox" id="doc-itin"> <span id="o-doc-itin">Carta ITIN</span></label>
+      <label class="check-opt"><input type="checkbox" id="doc-ss"> <span id="o-doc-ss">Tarjeta de Seguro Social</span></label>
+      <label class="check-opt"><input type="checkbox" id="doc-prev"> <span id="o-doc-prev">Declaración del año anterior</span></label>
+      <label class="check-opt"><input type="checkbox" id="doc-1098"> <span>1098 (hipoteca / estudiante)</span></label>
+      <label class="check-opt"><input type="checkbox" id="doc-biz"> <span id="o-doc-biz">Registros de negocio / gastos</span></label>
+      <label class="check-opt"><input type="checkbox" id="doc-other"> <span id="o-doc-other">Otros documentos</span></label>
+    </div>
+  </div>
+
+  <div class="subsec" style="margin-top:14px">
+    <div class="subsec-title" id="ss-dd">Depósito Directo del Reembolso</div>
+    <div class="field"><label id="l-bank">Banco</label><input type="text" id="bank" placeholder="Nombre del banco"></div>
+    <div class="field"><label id="l-routing">Número de Ruta (Routing #)</label><input type="text" id="routing" maxlength="9" placeholder="9 dígitos"></div>
+    <div class="field"><label id="l-account">Número de Cuenta</label><input type="text" id="account" placeholder="Número de cuenta"></div>
+    <div class="field">
+      <label id="l-acct-type">Tipo de cuenta</label>
+      <div class="options">
+        <label class="opt"><input type="radio" name="acct-type" value="checking"> <span id="o-checking">Checking</span></label>
+        <label class="opt"><input type="radio" name="acct-type" value="savings"> <span id="o-savings">Savings</span></label>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="btn-back" onclick="back(7)"><span id="btn-back7">← Atrás</span></button>
+    <button class="btn-next" onclick="next(7)"><span id="btn-next7">Siguiente →</span></button>
+  </div>
+</div>
+
+<!-- ===== SECTION 8: FIRMA ===== -->
+<div class="section" id="step-8">
+  <div class="section-title" id="s8-title">8. Firma y Confirmación</div>
+  <div class="section-sub" id="s8-sub">Lea y firme para completar</div>
+
+  <div style="background:#FFF5F5;border:1px solid #8B1A1A;border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.6" id="auth-text">
+    Certifico que la información proporcionada en este cuestionario es verdadera, correcta y completa. 
+    Autorizo a T.M. Financial Services LLC / Avanty Services a preparar mi declaración de impuestos 
+    con base en la información aquí suministrada. Entiendo que soy responsable de la exactitud de 
+    los datos proporcionados.
+  </div>
+
+  <div class="field">
+    <label id="l-sig">Firma digital *</label>
+    <canvas id="sigCanvas" width="400" height="140"></canvas>
+    <div class="sig-actions">
+      <button class="btn-clear" onclick="clearSig()" id="btn-clear-sig">Borrar firma</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <label id="l-date-sign">Fecha de firma</label>
+    <input type="text" id="sign-date" readonly="" style="background:#f3f4f6;cursor:not-allowed">
+  </div>
+
+  <div class="field">
+    <label class="check-opt" style="align-items:flex-start;gap:10px">
+      <input type="checkbox" id="confirmo" style="margin-top:2px;accent-color:#8B1A1A;width:18px;height:18px">
+      <span id="l-confirmo">Confirmo que toda la información es correcta y autorizo la preparación de mi declaración.</span>
+    </label>
+    <div class="err" id="err-confirmo">Debe marcar esta casilla para continuar.</div>
+  </div>
+
+  <div class="nav">
+    <button class="btn-back" onclick="back(8)"><span id="btn-back8">← Atrás</span></button>
+    <button class="btn-submit" onclick="submitForm()"><span id="btn-submit">✓ Enviar Cuestionario</span></button>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div id="success">
+  <div class="success-icon">✅</div>
+  <h2 style="color:#8B1A1A;font-size:20px" id="succ-title">¡Cuestionario Enviado!</h2>
+  <p style="color:#6B7280;margin:8px 0" id="succ-sub">Nos pondremos en contacto pronto.</p>
+  <div class="success-num" id="file-num">AVT-Q-2024-XXXX</div>
+  <p style="font-size:12px;color:#6B7280;margin-top:6px" id="succ-info">Guarde este número de archivo para referencia.</p>
+  <div class="print-btns">
+    <button class="btn-print" onclick="printForm()" id="btn-print2">🖨️ Imprimir</button>
+    <button class="btn-pdf" onclick="pdfForm()" id="btn-pdf2">⬇️ Guardar PDF</button>
+  </div>
+</div>
+
+<!-- FLOAT BAR -->
+<div id="float-bar" style="display: none;">
+  <button class="fb-print" onclick="printForm()" title="Imprimir">🖨️</button>
+  <button class="fb-pdf" onclick="pdfForm()" title="Guardar PDF">⬇️</button>
+</div>
+
+<script>
+// ===================== LANGUAGE =====================
+const T = {
+  es: {
+    'h-title':'Cuestionario del Cliente','h-sub':'T.M. Financial Services LLC',
+    's1-title':'1. Información Personal','s1-sub':'Complete todos los campos requeridos *',
+    's2-title':'2. Historial Fiscal','s2-sub':'Información sobre años anteriores',
+    's3-title':'3. Cónyuge y Dependientes','s3-sub':'Si aplica',
+    's4-title':'4. Ingresos','s4-sub':'Seleccione todas las fuentes que apliquen',
+    's5-title':'5. Deducciones y Créditos','s5-sub':'Seleccione todo lo que aplique',
+    's6-title':'6. Estatus Migratorio','s6-sub':'Esta información es confidencial',
+    's7-title':'7. Documentos y Depósito Directo','s7-sub':'Marque los documentos que trae / enviará',
+    's8-title':'8. Firma y Confirmación','s8-sub':'Lea y firme para completar',
+    'l-fname':'Nombre *','l-lname':'Apellido(s) *','l-ssn':'SSN / ITIN *','l-dob':'Fecha de Nacimiento *',
+    'l-phone':'Teléfono *','l-email':'Correo Electrónico','l-address':'Dirección *',
+    'l-city':'Ciudad *','l-state':'Estado *','l-zip':'ZIP *',
+    'l-filing':'Estado Civil / Filing Status *',
+    'o-single':'Soltero(a)','o-mfj':'Casado(a) Conjunto','o-mfs':'Casado(a) Separado',
+    'o-hh':'Jefe de Familia','o-qw':'Viudo(a) Calificado',
+    'l-taxyear':'Año fiscal a preparar *','l-filed-before':'¿Ha presentado impuestos antes?',
+    'o-yes':'Sí','o-no':'No',
+    'l-prev-preparer':'¿Quién preparó sus impuestos el año pasado?',
+    'l-owe':'¿Tuvo balance a deber o a favor el año pasado?',
+    'o-owe':'A deber','o-refund':'A favor / Reembolso','o-zero':'$0','o-dontknow':'No sé',
+    'l-irs-letters':'¿Recibió cartas del IRS o FTB este año?',
+    'l-irs-detail':'Si recibió cartas, explique brevemente:',
+    'ss-spouse':'Información del Cónyuge',
+    'l-spname':'Nombre completo','l-spssn':'SSN / ITIN del cónyuge',
+    'l-spdob':'Fecha de nacimiento','l-spemail':'Email del cónyuge',
+    'ss-deps':'Dependientes','btn-add-dep':'+ Agregar Dependiente',
+    'l-income-types':'Tipos de ingresos recibidos en el año:',
+    'o-w2':'W-2 (empleado)','o-1099nec':'1099-NEC (contratista independiente)',
+    'o-1099misc':'1099-MISC','o-1099g':'1099-G (desempleo / reembolso estatal)',
+    'o-1099r':'1099-R (pensión / retiro)','o-ssa':'SSA-1099 (Seguro Social)',
+    'o-rent':'Ingresos por renta','o-biz':'Negocio propio (Schedule C)',
+    'o-invest':'Inversiones / dividendos (1099-DIV / 1099-INT)',
+    'o-crypto':'Criptomonedas','o-other-inc':'Otros ingresos',
+    'l-other-inc':'Especifique otros ingresos:','l-employers':'Nombre(s) de empleadores / pagadores principales:',
+    'l-ded':'Deducciones / situaciones especiales:',
+    'o-mortgage':'Intereses de hipoteca (Form 1098)','o-charity':'Donaciones de caridad',
+    'o-student':'Préstamo estudiantil (Form 1098-E)','o-hsa':'HSA / MSA (Form 1099-SA)',
+    'o-ira':'Aportación a IRA / 401k','o-edu':'Gastos de educación (Form 1098-T)',
+    'o-biz-exp':'Gastos de negocio propio','o-home-off':'Oficina en casa',
+    'o-vehicle':'Uso del vehículo para trabajo','o-childcare':'Gastos de cuidado de hijos (Form 2441)',
+    'o-energy':'Mejoras de energía en hogar','o-alimony':'Pensión alimenticia pagada',
+    'l-notes-ded':'Notas adicionales sobre deducciones:',
+    'l-citizen':'Estatus migratorio *',
+    'o-citizen':'Ciudadano(a) americano(a)','o-pr':'Residente Permanente (Green Card)',
+    'o-visa':'Visa de trabajo (H1B, L1, O1, etc.)','o-itin':'ITIN / Sin estatus legal',
+    'o-other-cit':'Otro',
+    'l-foreign-income':'¿Tuvo ingresos fuera de EE.UU. este año?',
+    'l-foreign-accounts':'¿Tiene cuentas bancarias fuera de EE.UU.?',
+    'l-docs':'Documentos disponibles:',
+    'o-doc-id':'Identificación con foto','o-doc-itin':'Carta ITIN',
+    'o-doc-ss':'Tarjeta de Seguro Social','o-doc-prev':'Declaración del año anterior',
+    'o-doc-biz':'Registros de negocio / gastos','o-doc-other':'Otros documentos',
+    'ss-dd':'Depósito Directo del Reembolso',
+    'l-bank':'Banco','l-routing':'Número de Ruta (Routing #)','l-account':'Número de Cuenta',
+    'l-acct-type':'Tipo de cuenta','o-checking':'Checking','o-savings':'Savings',
+    'l-sig':'Firma digital *','btn-clear-sig':'Borrar firma',
+    'l-date-sign':'Fecha de firma',
+    'l-confirmo':'Confirmo que toda la información es correcta y autorizo la preparación de mi declaración.',
+    'btn-submit':'✓ Enviar Cuestionario',
+    'auth-text':'Certifico que la información proporcionada en este cuestionario es verdadera, correcta y completa. Autorizo a T.M. Financial Services LLC / Avanty Services a preparar mi declaración de impuestos con base en la información aquí suministrada. Entiendo que soy responsable de la exactitud de los datos proporcionados.',
+    'succ-title':'¡Cuestionario Enviado!','succ-sub':'Nos pondremos en contacto pronto.',
+    'succ-info':'Guarde este número de archivo para referencia.',
+    'btn-print2':'🖨️ Imprimir','btn-pdf2':'⬇️ Guardar PDF',
+    'btn-next1':'Siguiente →','btn-next2':'Siguiente →','btn-next3':'Siguiente →',
+    'btn-next4':'Siguiente →','btn-next5':'Siguiente →','btn-next6':'Siguiente →',
+    'btn-next7':'Siguiente →',
+    'btn-back2':'← Atrás','btn-back3':'← Atrás','btn-back4':'← Atrás',
+    'btn-back5':'← Atrás','btn-back6':'← Atrás','btn-back7':'← Atrás','btn-back8':'← Atrás',
+    'prog-prefix':'Sección'
+  },
+  en: {
+    'h-title':'Client Questionnaire','h-sub':'T.M. Financial Services LLC',
+    's1-title':'1. Personal Information','s1-sub':'Please complete all required fields *',
+    's2-title':'2. Tax History','s2-sub':'Information about previous years',
+    's3-title':'3. Spouse & Dependents','s3-sub':'If applicable',
+    's4-title':'4. Income','s4-sub':'Select all sources that apply',
+    's5-title':'5. Deductions & Credits','s5-sub':'Select all that apply',
+    's6-title':'6. Immigration Status','s6-sub':'This information is confidential',
+    's7-title':'7. Documents & Direct Deposit','s7-sub':'Check documents you will bring / send',
+    's8-title':'8. Signature & Confirmation','s8-sub':'Please read and sign to complete',
+    'l-fname':'First Name *','l-lname':'Last Name *','l-ssn':'SSN / ITIN *','l-dob':'Date of Birth *',
+    'l-phone':'Phone *','l-email':'Email Address','l-address':'Address *',
+    'l-city':'City *','l-state':'State *','l-zip':'ZIP *',
+    'l-filing':'Filing Status *',
+    'o-single':'Single','o-mfj':'Married Filing Jointly','o-mfs':'Married Filing Separately',
+    'o-hh':'Head of Household','o-qw':'Qualifying Widow(er)',
+    'l-taxyear':'Tax year to prepare *','l-filed-before':'Have you filed taxes before?',
+    'o-yes':'Yes','o-no':'No',
+    'l-prev-preparer':'Who prepared your taxes last year?',
+    'l-owe':'Did you owe or receive a refund last year?',
+    'o-owe':'Owed','o-refund':'Refund','o-zero':'$0','o-dontknow':"Don't know",
+    'l-irs-letters':'Did you receive any IRS or FTB letters this year?',
+    'l-irs-detail':'If you received letters, please explain:',
+    'ss-spouse':"Spouse's Information",
+    'l-spname':'Full name','l-spssn':"Spouse's SSN / ITIN",
+    'l-spdob':'Date of birth','l-spemail':"Spouse's email",
+    'ss-deps':'Dependents','btn-add-dep':'+ Add Dependent',
+    'l-income-types':'Types of income received during the year:',
+    'o-w2':'W-2 (employee)','o-1099nec':'1099-NEC (independent contractor)',
+    'o-1099misc':'1099-MISC','o-1099g':'1099-G (unemployment / state refund)',
+    'o-1099r':'1099-R (pension / retirement)','o-ssa':'SSA-1099 (Social Security)',
+    'o-rent':'Rental income','o-biz':'Self-employed (Schedule C)',
+    'o-invest':'Investments / dividends (1099-DIV / 1099-INT)',
+    'o-crypto':'Cryptocurrency','o-other-inc':'Other income',
+    'l-other-inc':'Specify other income:','l-employers':'Employer(s) / payer name(s):',
+    'l-ded':'Deductions / special situations:',
+    'o-mortgage':'Mortgage interest (Form 1098)','o-charity':'Charitable donations',
+    'o-student':'Student loan interest (Form 1098-E)','o-hsa':'HSA / MSA (Form 1099-SA)',
+    'o-ira':'IRA / 401k contribution','o-edu':'Education expenses (Form 1098-T)',
+    'o-biz-exp':'Business expenses','o-home-off':'Home office',
+    'o-vehicle':'Vehicle use for work','o-childcare':'Child care expenses (Form 2441)',
+    'o-energy':'Home energy improvements','o-alimony':'Alimony paid',
+    'l-notes-ded':'Additional notes on deductions:',
+    'l-citizen':'Immigration status *',
+    'o-citizen':'U.S. Citizen','o-pr':'Permanent Resident (Green Card)',
+    'o-visa':'Work visa (H1B, L1, O1, etc.)','o-itin':'ITIN / Undocumented',
+    'o-other-cit':'Other',
+    'l-foreign-income':'Did you have income outside the U.S. this year?',
+    'l-foreign-accounts':'Do you have bank accounts outside the U.S.?',
+    'l-docs':'Available documents:',
+    'o-doc-id':'Photo ID','o-doc-itin':'ITIN letter',
+    'o-doc-ss':'Social Security card','o-doc-prev':'Prior year tax return',
+    'o-doc-biz':'Business records / expenses','o-doc-other':'Other documents',
+    'ss-dd':'Refund Direct Deposit',
+    'l-bank':'Bank name','l-routing':'Routing number','l-account':'Account number',
+    'l-acct-type':'Account type','o-checking':'Checking','o-savings':'Savings',
+    'l-sig':'Digital signature *','btn-clear-sig':'Clear signature',
+    'l-date-sign':'Signature date',
+    'l-confirmo':'I confirm that all information is correct and I authorize preparation of my tax return.',
+    'btn-submit':'✓ Submit Questionnaire',
+    'auth-text':'I certify that the information provided in this questionnaire is true, correct, and complete. I authorize T.M. Financial Services LLC / Avanty Services to prepare my tax return based on the information provided here. I understand that I am responsible for the accuracy of the data provided.',
+    'succ-title':'Questionnaire Submitted!','succ-sub':'We will be in touch soon.',
+    'succ-info':'Keep this file number for your records.',
+    'btn-print2':'🖨️ Print','btn-pdf2':'⬇️ Save PDF',
+    'btn-next1':'Next →','btn-next2':'Next →','btn-next3':'Next →',
+    'btn-next4':'Next →','btn-next5':'Next →','btn-next6':'Next →',
+    'btn-next7':'Next →',
+    'btn-back2':'← Back','btn-back3':'← Back','btn-back4':'← Back',
+    'btn-back5':'← Back','btn-back6':'← Back','btn-back7':'← Back','btn-back8':'← Back',
+    'prog-prefix':'Section'
+  }
+};
+let currentLang = 'es';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btn-es').className = lang==='es' ? 'active' : '';
+  document.getElementById('btn-en').className = lang==='en' ? 'active' : '';
+  const d = T[lang];
+  for (const [id, text] of Object.entries(d)) {
+    if (id === 'prog-prefix') continue;
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+  updateProgress(currentStep);
+}
+
+// ===================== STEPS =====================
+let currentStep = 1;
+const TOTAL = 8;
+
+function updateProgress(step) {
+  document.getElementById('prog-fill').style.width = (step/TOTAL*100)+'%';
+  const prefix = T[currentLang]['prog-prefix'];
+  document.getElementById('prog-text').textContent = prefix+' '+step+' / '+TOTAL;
+  document.querySelectorAll('.dot').forEach((d,i) => {
+    d.className = 'dot';
+    if (i+1 < step) d.classList.add('done');
+    else if (i+1 === step) d.classList.add('current');
+  });
+  document.getElementById('float-bar').style.display = step > 1 ? 'flex' : 'none';
+}
+
+function goTo(step) {
+  document.getElementById('step-'+currentStep).classList.remove('active');
+  currentStep = step;
+  document.getElementById('step-'+step).classList.add('active');
+  updateProgress(step);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function next(from) {
+  setTimeout(() => {
+    document.getElementById('step-'+from).classList.remove('active');
+    currentStep = from + 1;
+    document.getElementById('step-'+currentStep).classList.add('active');
+    updateProgress(currentStep);
+    window.scrollTo({top:0, behavior:'smooth'});
+  }, 100);
+}
+
+function back(from) {
+  document.getElementById('step-'+from).classList.remove('active');
+  currentStep = from - 1;
+  document.getElementById('step-'+currentStep).classList.add('active');
+  updateProgress(currentStep);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ===================== DATE DROPDOWNS =====================
+function fillDays(selM, selD, selY) {
+  const m = parseInt(selM.value)||0;
+  const y = parseInt(selY.value)||2000;
+  const days = new Date(y,m,0).getDate()||31;
+  const cur = selD.value;
+  selD.innerHTML = '<option value="">Día</option>';
+  for(let i=1;i<=days;i++) {
+    const v = String(i).padStart(2,'0');
+    selD.innerHTML += `<option${v===cur?' selected':''}>${v}</option>`;
+  }
+}
+
+function fillYears(sel, minY, maxY) {
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">Año</option>';
+  for(let y=maxY;y>=minY;y--) {
+    sel.innerHTML += `<option${String(y)===cur?' selected':''}>${y}</option>`;
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const curY = new Date().getFullYear();
+  // Client DOB
+  fillYears(document.getElementById('dob-y'), 1930, curY-1);
+  document.getElementById('dob-m').addEventListener('change', () => fillDays(document.getElementById('dob-m'), document.getElementById('dob-d'), document.getElementById('dob-y')));
+  document.getElementById('dob-y').addEventListener('change', () => fillDays(document.getElementById('dob-m'), document.getElementById('dob-d'), document.getElementById('dob-y')));
+  // Spouse DOB
+  fillYears(document.getElementById('sp-dob-y'), 1930, curY-1);
+  document.getElementById('sp-dob-m').addEventListener('change', () => fillDays(document.getElementById('sp-dob-m'), document.getElementById('sp-dob-d'), document.getElementById('sp-dob-y')));
+  document.getElementById('sp-dob-y').addEventListener('change', () => fillDays(document.getElementById('sp-dob-m'), document.getElementById('sp-dob-d'), document.getElementById('sp-dob-y')));
+  // Today's date
+  const today = new Date();
+  document.getElementById('sign-date').value = (today.getMonth()+1).toString().padStart(2,'0')+'/'+today.getDate().toString().padStart(2,'0')+'/'+today.getFullYear();
+  // Init progress
+  updateProgress(1);
+  // Signature canvas
+  initSig();
+});
+
+// ===================== DEPENDENTS =====================
+let depCount = 0;
+function addDep() {
+  depCount++;
+  const d = document.createElement('div');
+  d.className = 'dep-card';
+  d.id = 'dep-'+depCount;
+  const curY = new Date().getFullYear();
+  let dayOpts = '<option value="">Día</option>';
+  for(let i=1;i<=31;i++) dayOpts += `<option>${String(i).padStart(2,'0')}</option>`;
+  let yearOpts = '<option value="">Año</option>';
+  for(let y=curY;y>=curY-25;y--) yearOpts += `<option>${y}</option>`;
+  let monthOpts = '<option value="">Mes</option>';
+  for(let m=1;m<=12;m++) monthOpts += `<option>${String(m).padStart(2,'0')}</option>`;
+
+  d.innerHTML = `
+    <div class="dep-num">Dependiente ${depCount}</div>
+    <button class="btn-rm" onclick="removeDep(${depCount})">✕</button>
+    <div class="field"><label>Nombre completo</label><input type="text" placeholder="Nombre completo"/></div>
+    <div class="field"><label>SSN / ITIN</label><input type="text" placeholder="XXX-XX-XXXX" maxlength="11"/></div>
+    <div class="field"><label>Fecha de nacimiento</label>
+      <div class="date-row">
+        <select>${monthOpts}</select>
+        <select>${dayOpts}</select>
+        <select>${yearOpts}</select>
+      </div>
+    </div>
+    <div class="field"><label>Relación</label>
+      <select><option>Hijo(a)</option><option>Stepchild</option><option>Nieto(a)</option><option>Hermano(a)</option><option>Padre/Madre</option><option>Otro</option></select>
+    </div>
+    <div class="field"><label>¿Vivió con usted todo el año?</label>
+      <div class="options">
+        <label class="opt"><input type="radio" name="dep-live-${depCount}" value="si"/><span>Sí</span></label>
+        <label class="opt"><input type="radio" name="dep-live-${depCount}" value="no"/><span>No</span></label>
+      </div>
+    </div>`;
+  document.getElementById('dep-list').appendChild(d);
+}
+
+function removeDep(n) {
+  const el = document.getElementById('dep-'+n);
+  if (el) el.remove();
+}
+
+// ===================== SIGNATURE =====================
+let sigCtx, isDrawing=false;
+function initSig() {
+  const canvas = document.getElementById('sigCanvas');
+  sigCtx = canvas.getContext('2d');
+  sigCtx.lineJoin = 'round';
+  sigCtx.lineCap = 'round';
+
+  canvas.addEventListener('mousedown', e => { isDrawing=true; const r=canvas.getBoundingClientRect(); sigCtx.beginPath(); sigCtx.moveTo(e.clientX-r.left, e.clientY-r.top); });
+  canvas.addEventListener('mousemove', e => { if(!isDrawing) return; const r=canvas.getBoundingClientRect(); sigCtx.lineTo(e.clientX-r.left, e.clientY-r.top); sigCtx.strokeStyle='#1F2937'; sigCtx.lineWidth=2; sigCtx.stroke(); });
+  canvas.addEventListener('mouseup', () => isDrawing=false);
+  canvas.addEventListener('mouseleave', () => isDrawing=false);
+
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); isDrawing=true; const r=canvas.getBoundingClientRect(); const t=e.touches[0]; sigCtx.beginPath(); sigCtx.moveTo(t.clientX-r.left, t.clientY-r.top); }, {passive:false});
+  canvas.addEventListener('touchmove', e => { e.preventDefault(); if(!isDrawing) return; const r=canvas.getBoundingClientRect(); const t=e.touches[0]; sigCtx.lineTo(t.clientX-r.left, t.clientY-r.top); sigCtx.strokeStyle='#1F2937'; sigCtx.lineWidth=2; sigCtx.stroke(); }, {passive:false});
+  canvas.addEventListener('touchend', () => isDrawing=false);
+}
+function clearSig() { sigCtx.clearRect(0,0,400,140); }
+
+// ===================== SUBMIT =====================
+function submitForm() {
+  if (!document.getElementById('confirmo').checked) {
+    document.getElementById('err-confirmo').style.display='block';
+    return;
+  }
+  document.getElementById('err-confirmo').style.display='none';
+  const num = 'AVT-Q-'+new Date().getFullYear()+'-'+(Math.floor(Math.random()*9000)+1000);
+
+  // Helper getters
+  const g = function(id) { var el = document.getElementById(id); return el ? (el.value || '') : ''; };
+  const gr = function(name) { var el = document.querySelector('input[name="'+name+'"]:checked'); return el ? el.value : ''; };
+  const gSel = function(id) { var el = document.getElementById(id); return el ? el.value : ''; };
+
+  var nombre = g('nombre'); var apellido = g('apellido');
+  var telefono = g('telefono'); var email = g('email');
+  var direccion = g('direccion'); var ciudad = g('ciudad');
+  var estado = gSel('estado') || g('estado');
+  var zip = g('zip');
+  var mesNac = gSel('mes-nac'); var diaNac = gSel('dia-nac'); var anioNac = gSel('anio-nac');
+  var fechaNac = mesNac + '/' + diaNac + '/' + anioNac;
+  var anioFiscal = gSel('anio-fiscal') || g('anio-fiscal');
+  var estadoCivil = gr('estado-civil');
+  var estatus = gr('estatus-migratorio');
+  var ingresosExt = gr('ingresos-extranjeros');
+  var cuentasExt = gr('cuentas-extranjeras');
+
+  // Checkboxes
+  var ingresos = [];
+  ['w2','1099nec','1099misc','1099g','1099r','ssa1099','renta','negocio','inversiones','cripto'].forEach(function(id){
+    var el = document.getElementById(id); if(el && el.checked) ingresos.push(el.parentElement.textContent.trim().substring(0,30));
+  });
+  var deducciones = [];
+  ['hipoteca','donaciones','estudiantil','hsa','ira401k','educacion','negocio-ded','oficina','vehiculo','cuidado-hijos','energia','pension'].forEach(function(id){
+    var el = document.getElementById(id); if(el && el.checked) deducciones.push(el.parentElement.textContent.trim().substring(0,30));
+  });
+  var documentos = [];
+  ['doc-w2','doc-1099','doc-id','doc-itin','doc-ss','doc-declaracion','doc-1098','doc-registros','doc-otros'].forEach(function(id){
+    var el = document.getElementById(id); if(el && el.checked) documentos.push(el.parentElement.textContent.trim().substring(0,30));
+  });
+
+  // === GENERATE PDF ===
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF();
+  var pageW = doc.internal.pageSize.getWidth();
+  var y = 20;
+  var lh = 7;
+  var margin = 15;
+  var col2 = 85;
+  var maxW = pageW - col2 - margin;
+
+  // Header background
+  doc.setFillColor(130, 20, 20);
+  doc.rect(0, 0, pageW, 38, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(15);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Avanty Services', margin, 14);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('T.M. Financial Services LLC - Cuestionario del Cliente', margin, 22);
+  doc.text('No. Confirmacion: ' + num, margin, 30);
+  doc.text('Fecha: ' + new Date().toLocaleDateString('es-US'), pageW - margin, 30, {align:'right'});
+
+  y = 46;
+  doc.setTextColor(0, 0, 0);
+
+  var section = function(title) {
+    if(y > 265) { doc.addPage(); y = 15; }
+    doc.setFillColor(220, 200, 160);
+    doc.rect(margin - 2, y - 5, pageW - 2*margin + 4, 8, 'F');
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(100, 10, 10);
+    doc.text(title, margin, y);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    y += lh + 1;
+  };
+
+  var row = function(label, value) {
+    if(y > 275) { doc.addPage(); y = 15; }
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.text(label + ':', margin, y);
+    doc.setFont('helvetica', 'normal');
+    var lines = doc.splitTextToSize(String(value || 'N/A'), maxW);
+    doc.text(lines, col2, y);
+    y += lh * lines.length;
+  };
+
+  section('1. Informacion Personal');
+  row('Nombre completo', nombre + ' ' + apellido);
+  row('Fecha de Nacimiento', fechaNac);
+  row('Telefono', telefono);
+  row('Email', email);
+  row('Direccion', direccion + ', ' + ciudad + ', ' + estado + ' ' + zip);
+  row('Estado Civil', estadoCivil);
+  y += 2;
+
+  section('2. Historial Fiscal');
+  row('Ano fiscal a preparar', anioFiscal);
+  y += 2;
+
+  section('4. Ingresos');
+  row('Tipos de ingreso', ingresos.length ? ingresos.join(', ') : 'Ninguno seleccionado');
+  y += 2;
+
+  section('5. Deducciones y Creditos');
+  row('Deducciones', deducciones.length ? deducciones.join(', ') : 'Ninguna seleccionada');
+  y += 2;
+
+  section('6. Estatus Migratorio');
+  row('Estatus migratorio', estatus);
+  row('Ingresos fuera de EE.UU.', ingresosExt);
+  row('Cuentas fuera de EE.UU.', cuentasExt);
+  y += 2;
+
+  section('7. Documentos Disponibles');
+  row('Documentos', documentos.length ? documentos.join(', ') : 'Ninguno seleccionado');
+  y += 2;
+
+  section('8. Firma Digital');
+  row('Fecha de firma', new Date().toLocaleDateString('es-US'));
+  row('Autorizo preparacion', 'Si');
+
+  // Page footer
+  var pages = doc.internal.getNumberOfPages();
+  for(var p = 1; p <= pages; p++) {
+    doc.setPage(p);
+    doc.setFontSize(7);
+    doc.setTextColor(150, 150, 150);
+    doc.text('Pagina ' + p + ' de ' + pages + '  |  Avanty Services - T.M. Financial Services LLC  |  avantyservices1@gmail.com', pageW/2, 291, {align:'center'});
+  }
+
+  var pdfBase64 = doc.output('datauristring').split(',')[1];
+
+  // === SUBMIT TO NETLIFY FORMS ===
+  var formBody = new URLSearchParams();
+  formBody.append('form-name', 'cuestionario-cliente');
+  formBody.append('nombre', nombre);
+  formBody.append('apellido', apellido);
+  formBody.append('telefono', telefono);
+  formBody.append('email', email);
+  formBody.append('direccion', direccion + ' ' + ciudad + ' ' + estado + ' ' + zip);
+  formBody.append('anio-fiscal', anioFiscal);
+  formBody.append('numero-confirmacion', num);
+  fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:formBody.toString()}).catch(function(e){console.log('Form error:',e);});
+
+  // === SEND EMAIL WITH PDF VIA SERVERLESS FUNCTION ===
+  fetch('/.netlify/functions/send-email', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      numero: num,
+      nombre: nombre + ' ' + apellido,
+      telefono: telefono,
+      email: email,
+      anioFiscal: anioFiscal,
+      pdfBase64: pdfBase64
+    })
+  }).then(function(r){ return r.json(); })
+    .then(function(d){ console.log('Email sent:', d); })
+    .catch(function(e){ console.log('Email error:', e); });
+
+  // Show success screen
+  document.getElementById('file-num').textContent = num;
+  document.getElementById('step-8').classList.remove('active');
+  document.getElementById('success-screen').classList.add('active');
+}
+
+// ===================== PRINT / PDF =====================
+function printForm() {
+  // Show all sections for print
+  for(let i=1;i<=8;i++) {
+    const s = document.getElementById('step-'+i);
+    if(s) s.style.display='block';
+  }
+  window.print();
+  setTimeout(() => {
+    for(let i=1;i<=8;i++) {
+      const s = document.getElementById('step-'+i);
+      if(s) { s.style.display=''; if(i===currentStep) s.classList.add('active'); }
+    }
+  }, 1000);
+}
+
+function pdfForm() {
+  const sigDataURL = document.getElementById('sigCanvas').toDataURL();
+  const w = window.open('','_blank');
+  const routingVal = document.getElementById('routing').value;
+  const accountVal = document.getElementById('account').value;
+  const ssnVal = document.getElementById('ssn').value;
+  const routingMasked = routingVal.length > 4 ? '•••••'+routingVal.slice(-4) : routingVal;
+  const accountMasked = accountVal.length > 4 ? '•••••'+accountVal.slice(-4) : accountVal;
+  const ssnMasked = ssnVal.length > 4 ? '•••-••-'+ssnVal.slice(-4) : ssnVal;
+  const today = document.getElementById('sign-date').value;
+  const dobM = document.getElementById('dob-m').value;
+  const dobD = document.getElementById('dob-d').value;
+  const dobY = document.getElementById('dob-y').value;
+  const dobFormatted = (dobM && dobD && dobY) ? dobM+'/'+dobD+'/'+dobY : '';
+
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+  <title>Avanty Services – Cuestionario</title>
+  <style>
+    body{font-family:Arial,sans-serif;max-width:700px;margin:0 auto;padding:20px;color:#1F2937}
+    h1{color:#8B1A1A;font-size:20px;border-bottom:2px solid #C9A84C;padding-bottom:8px}
+    h2{color:#8B1A1A;font-size:15px;margin:16px 0 8px}
+    .row{display:flex;gap:16px;margin-bottom:6px}
+    .field{flex:1;margin-bottom:6px}
+    label{font-size:11px;color:#6B7280;display:block}
+    .val{font-size:13px;font-weight:600;border-bottom:1px solid #e5e7eb;padding:2px 0;min-height:20px}
+    .sig-img{border:1px solid #D1D5DB;border-radius:6px;width:300px;height:80px}
+    .footer{margin-top:24px;font-size:11px;color:#9CA3AF;text-align:center}
+    @media print{button{display:none}}
+  </style></head><body>
+  <h1>Avanty Services – Cuestionario del Cliente</h1>
+  <p style="font-size:12px;color:#6B7280">Fecha: ${today} | ${document.getElementById('file-num').textContent}</p>
+  <h2>Información Personal</h2>
+  <div class="row">
+    <div class="field"><label>Nombre</label><div class="val">${document.getElementById('fname').value} ${document.getElementById('lname').value}</div></div>
+    <div class="field"><label>SSN/ITIN</label><div class="val">${ssnMasked}</div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Fecha de nacimiento</label><div class="val">${dobFormatted}</div></div>
+    <div class="field"><label>Teléfono</label><div class="val">${document.getElementById('phone').value}</div></div>
+  </div>
+  <div class="field"><label>Dirección</label><div class="val">${document.getElementById('address').value}, ${document.getElementById('city').value}, ${document.getElementById('state').value} ${document.getElementById('zip').value}</div></div>
+  <h2>Depósito Directo</h2>
+  <div class="row">
+    <div class="field"><label>Banco</label><div class="val">${document.getElementById('bank').value}</div></div>
+    <div class="field"><label>Routing</label><div class="val">${routingMasked}</div></div>
+    <div class="field"><label>Cuenta</label><div class="val">${accountMasked}</div></div>
+  </div>
+  <h2>Firma</h2>
+  <img class="sig-img" src="${sigDataURL}"/>
+  <div class="footer">T.M. Financial Services LLC / Avanty Services | info@avantyservices.com | (818) 000-0000</div>
+  </body></html>`);
+  w.document.close();
+  setTimeout(() => w.print(), 400);
+}
+</script>
+
+<!-- Netlify Form for email notifications -->
+<form hidden="" method="post" name="cuestionario-cliente"><input type="hidden" name="form-name" value="cuestionario-cliente">
+  <input type="text" name="nombre">
+  <input type="text" name="apellido">
+  <input type="tel" name="telefono">
+  <input type="email" name="email">
+  <input type="text" name="direccion">
+  <input type="text" name="anio-fiscal">
+  <input type="text" name="numero-confirmacion">
+</form>
+
+
+<grammarly-desktop-integration data-grammarly-shadow-root="true" style="visibility: visible !important;"></grammarly-desktop-integration></body></html>
