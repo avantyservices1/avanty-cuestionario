@@ -914,7 +914,7 @@ function collectOfficersSummary(){
     const select = row.querySelector('select');
     const name = nameInput ? nameInput.value.trim() : '';
     if(!name) return;
-    const cargo = (select && select.selectedIndex >= 0) ? select.options[select.selectedIndex].textContent.trim() : '';
+    const opt = iconst cargoOpt = select ? select.options[select.selectedIndex] : null; const cargo = (cargoOpt && cargoOpt.value !== '') ? cargoOpt.textContent.trim() : '';nput.options[input.selectedIndex]; value = (opt && opt.value !== '') ? opt.textContent.trim() : '';
     out += `${name} — ${cargo}\n`;
   });
   return out.trim();
@@ -989,7 +989,7 @@ function fieldRow(fieldEl){
   if(!input) return '';
   let value = '';
   if(input.tagName === 'SELECT'){
-    value = input.options[input.selectedIndex] ? input.options[input.selectedIndex].textContent.trim() : '';
+    const opt = input.options[input.selectedIndex]; value = (opt && opt.value !== '') ? opt.textContent.trim() : '';
   } else {
     value = input.value || '';
   }
@@ -1049,7 +1049,7 @@ function walkContainer(container){
         const select = row.querySelector('select');
         const name = nameInput ? nameInput.value.trim() : '';
         if(!name) return;
-        const cargo = (select && select.selectedIndex >= 0) ? select.options[select.selectedIndex].textContent.trim() : '';
+                  const cargoOpt = select ? select.options[select.selectedIndex] : null; const cargo = (cargoOpt && cargoOpt.value !== '') ? cargoOpt.textContent.trim() : '';
         html += `<div class="print-row"><span class="print-label">${escapeHtml(name)}</span><span class="print-value">${escapeHtml(cargo)}</span></div>`;
       });
     } else if(child.classList && child.classList.contains('person-card')){
