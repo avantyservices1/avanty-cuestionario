@@ -33,6 +33,7 @@ export default async (req: Request, context: Context) => {
     const htmlBody = `
       <div style="font-family:Arial,sans-serif;color:#2B2420;max-width:560px;margin:0 auto;">
         <div style="background:#8B1A1A;padding:20px;border-radius:8px 8px 0 0;">
+<img src="https://avanty-cuestionario-licencia-alcohol.netlify.app/logo.png" alt="Avanty Services" width="160" style="display:block;margin:0 auto 10px;max-width:160px;height:auto;" />
           <h2 style="color:#fff;margin:0;font-size:18px;">Avanty Services</h2>
           <p style="color:#E8D9B0;margin:4px 0 0;font-size:13px;">
             ${isEs ? "Cuestionario de Transferencia de Licencia (ABC)" : "Alcohol License Transfer Questionnaire (ABC)"}
