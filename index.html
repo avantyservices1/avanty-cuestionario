@@ -1114,25 +1114,46 @@ document.getElementById('printBtnSuccess').addEventListener('click', printQuesti
 async function generatePdfBase64(){
   const printView = fillPrintView();
 
-  // Temporarily show it off-screen so html2canvas can measure/render it
-  const prevDisplay = printView.style.display;
-  const prevPosition = printView.style.position;
-  printView.style.display = 'block';
-  printView.style.position = 'fixed';
-  printView.style.left = '-9999px';
-  printView.style.top = '0';
-  printView.style.width = '760px';
-  printView.style.background = '#fff';
-  printView.style.padding = '24px';
+      // Render the print view in a clipped, zero-size wrapper (instead of far
+      // off-screen) so it gets a real layout for html2canvas without ever
+      // being visible. This is more reliable across mobile browsers, which can
+      // fail to capture content positioned with large negative offsets.
+      const prevParent = printView.parentNode;
+      const prevNextSibling = printView.nextSibling;
+      const prevDisplay = printView.style.display;
 
-  await new Promise(r => setTimeout(r, 50)); // let layout settle
+      const clipWrap = document.createElement('div');
+      clipWrap.style.position = 'fixed';
+      clipWrap.style.top = '0';
+      clipWrap.style.left = '0';
+      clipWrap.style.width = '0';
+      clipWrap.style.height = '0';
+      clipWrap.style.overflow = 'hidden';
+      document.body.appendChild(clipWrap);
 
-  const canvas = await html2canvas(printView, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+      printView.style.display = 'block';
+      printView.style.position = 'static';
+      printView.style.width = '760px';
+      printView.style.background = '#fff';
+      printView.style.padding = '24px';
+      clipWrap.appendChild(printView);
 
-  printView.style.display = prevDisplay || '';
-  printView.style.position = prevPosition || '';
-  printView.style.left = '';
-  printView.style.width = '';
+      await new Promise(r => setTimeout(r, 150)); // let layout/images settle (mobile needs more time)
+
+      const canvas = await html2canvas(printView, {
+              scale: 2,
+              backgroundColor: '#ffffff',
+              useCORS: true,
+              windowWidth: 800,
+              windowHeight: Math.max(printView.scrollHeight + 48, 800)
+      });
+
+      if(prevNextSibling){ prevParent.insertBefore(printView, prevNextSibling); }
+      else { prevParent.appendChild(printView); }
+      printView.style.display = prevDisplay || '';
+      printView.style.position = '';
+      printView.style.width = '';
+      document.body.removeChild(clipWrap);
 
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF('p', 'pt', 'a4');
