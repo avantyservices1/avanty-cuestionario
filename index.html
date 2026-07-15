@@ -1,1073 +1,1184 @@
-<html lang="es"><head>
+<!DOCTYPE html>
+<html lang="es">
+<head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Avanty Services – Cuestionario del Cliente</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avanty Services — Cuestionario / Questionnaire</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#FDFCFA;color:#1F2937;font-size:15px}
+  :root{
+    --burgundy:#8B1A1A;
+    --burgundy-dark:#6B1313;
+    --gold:#C9A84C;
+    --gold-light:#E8D9B0;
+    --cream:#FDFCFA;
+    --ink:#2B2420;
+    --ink-soft:#6b5f55;
+    --line:#E6DFD3;
+    --danger:#B3261E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Georgia','Times New Roman',serif;background:var(--cream);color:var(--ink);}
+  .wrap{max-width:720px;margin:0 auto;padding:0 0 60px;}
 
-/* LANG BAR */
-#lang-bar{background:#1F2937;padding:8px 16px;display:flex;justify-content:flex-end;gap:8px}
-#lang-bar button{background:transparent;border:1px solid #C9A84C;color:#C9A84C;padding:4px 14px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:600}
-#lang-bar button.active{background:#C9A84C;color:#1F2937}
+  header{
+    background:linear-gradient(135deg, var(--burgundy) 0%, var(--burgundy-dark) 100%);
+    padding:28px 24px 24px;color:#fff;text-align:center;border-bottom:5px solid var(--gold);
+    position:relative;
+  }
+  .logo-img{max-width:280px;width:70%;height:auto;background:#fff;border-radius:10px;padding:10px 16px;margin:0 auto 14px;display:block;}
+  .doc-title{font-family:Arial, sans-serif;margin-top:4px;font-size:15px;letter-spacing:0.5px;color:#fff;font-weight:600;}
+  .doc-sub{font-family:Arial, sans-serif;font-size:12.5px;color:var(--gold-light);margin-top:4px;}
 
-/* HEADER */
-.header{background:#8B1A1A;padding:18px 20px;display:flex;align-items:center;gap:14px}
-.logo-wrap{background:#fff;border-radius:8px;padding:6px 10px;display:flex;align-items:center}
-.logo-svg{width:36px;height:36px}
-.logo-text{line-height:1.1}
-.logo-text span{display:block;font-weight:700;font-size:12px;color:#8B1A1A}
-.logo-text small{font-size:9px;color:#C9A84C;font-weight:600}
-.header-title{color:#fff}
-.header-title h1{font-size:18px;font-weight:700}
-.header-title p{font-size:12px;color:#C9A84C;margin-top:2px}
+  .lang-toggle{
+    position:absolute;top:14px;right:14px;
+    display:flex;background:rgba(255,255,255,0.15);border-radius:20px;overflow:hidden;
+    font-family:Arial, sans-serif;font-size:11.5px;font-weight:700;
+  }
+  .lang-toggle button{
+    border:none;background:transparent;color:#fff;padding:6px 12px;cursor:pointer;
+  }
+  .lang-toggle button.active{background:var(--gold);color:var(--burgundy-dark);}
 
-/* PROGRESS */
-.progress-wrap{padding:14px 16px;background:#fff;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:100}
-.progress-label{font-size:12px;color:#6B7280;margin-bottom:6px}
-.progress-bar{height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;background:#8B1A1A;border-radius:3px;transition:width .3s}
-.step-dots{display:flex;justify-content:space-between;margin-top:8px}
-.dot{width:22px;height:22px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#6B7280;cursor:pointer;transition:all .2s}
-.dot.done{background:#8B1A1A;color:#fff}
-.dot.current{background:#C9A84C;color:#1F2937}
+  .progress-bar{background:#fff;border-bottom:1px solid var(--line);padding:14px 24px;position:sticky;top:0;z-index:10;}
+  .progress-track{height:6px;background:var(--gold-light);border-radius:4px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--burgundy);width:11%;transition:width .3s ease;}
+  .progress-label{font-family:Arial, sans-serif;font-size:11.5px;color:var(--ink-soft);margin-top:6px;display:flex;justify-content:space-between;}
 
-/* SECTIONS */
-.section{display:none;padding:16px;animation:fadeIn .3s}
-.section.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.section-title{font-size:17px;font-weight:700;color:#8B1A1A;margin-bottom:4px;padding-bottom:8px;border-bottom:2px solid #C9A84C}
-.section-sub{font-size:12px;color:#6B7280;margin-bottom:14px}
+  form{padding:0 24px;}
+  .step{display:none;padding-top:26px;}
+  .step.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 
-/* FIELDS */
-.field{margin-bottom:14px}
-label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:4px}
-input[type=text],input[type=email],input[type=tel],input[type=number],select,textarea{
-  width:100%;padding:10px 12px;border:1.5px solid #D1D5DB;border-radius:8px;
-  font-size:14px;background:#fff;color:#1F2937;transition:border-color .2s}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#8B1A1A}
-textarea{resize:vertical;min-height:80px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .step-eyebrow{font-family:Arial, sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px;}
+  h2{font-size:21px;margin:0 0 6px;color:var(--burgundy);}
+  .step-help{font-family:Arial, sans-serif;font-size:13.5px;color:var(--ink-soft);margin-bottom:22px;line-height:1.5;}
 
-/* DATE ROW */
-.date-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.date-row select{padding:10px 8px;font-size:13px}
+  .field{margin-bottom:18px;}
+  label{display:block;font-family:Arial, sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:5px;}
+  label .opt{font-weight:400;color:var(--ink-soft);font-style:italic;}
+  input[type=text], input[type=email], input[type=tel], input[type=date], input[type=number], textarea, select{
+    width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:7px;
+    font-family:Arial, sans-serif;font-size:14.5px;color:var(--ink);background:#fff;
+  }
+  input:focus, textarea:focus, select:focus{outline:none;border-color:var(--burgundy);box-shadow:0 0 0 3px rgba(139,26,26,0.10);}
+  textarea{min-height:80px;resize:vertical;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  @media (max-width:480px){.row2,.row3{grid-template-columns:1fr;}}
 
-/* RADIO / CHECK */
-.options{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
-.opt{display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 12px;border:1.5px solid #D1D5DB;border-radius:8px;font-size:13px;transition:all .2s;background:#fff}
-.opt input{accent-color:#8B1A1A;width:16px;height:16px}
-.opt:has(input:checked){border-color:#8B1A1A;background:#FFF5F5}
-.check-opt{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:13px;cursor:pointer}
-.check-opt input{accent-color:#8B1A1A;width:16px;height:16px}
+  fieldset{border:1px solid var(--line);border-radius:9px;padding:14px 14px 4px;margin-bottom:18px;}
+  legend{font-family:Arial, sans-serif;font-size:12.5px;font-weight:700;color:var(--burgundy);padding:0 6px;}
+  .radio-row, .check-row{display:flex;gap:18px;flex-wrap:wrap;font-family:Arial, sans-serif;font-size:14px;margin-top:4px;}
+  .radio-row label, .check-row label{font-weight:400;display:flex;align-items:center;gap:6px;margin:0;}
+  input[type=radio], input[type=checkbox]{width:16px;height:16px;accent-color:var(--burgundy);}
 
-/* SUBSECTION */
-.subsec{background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:12px;margin-bottom:14px}
-.subsec-title{font-size:13px;font-weight:700;color:#8B1A1A;margin-bottom:10px}
+  .person-card{border:1.5px dashed var(--gold);border-radius:10px;padding:16px 14px;margin-bottom:16px;background:#FFFDF7;}
+  .person-card h4{margin:0 0 12px;font-family:Arial, sans-serif;font-size:13.5px;color:var(--burgundy);text-transform:uppercase;letter-spacing:1px;}
+  .remove-person{font-family:Arial, sans-serif;font-size:11.5px;color:var(--danger);background:none;border:none;cursor:pointer;float:right;text-decoration:underline;padding:0;}
+  .add-btn{font-family:Arial, sans-serif;font-size:13px;font-weight:700;color:var(--burgundy);background:#fff;border:1.5px solid var(--burgundy);border-radius:7px;padding:9px 16px;cursor:pointer;margin-bottom:8px;}
+  .add-btn:hover{background:var(--burgundy);color:#fff;}
 
-/* DEPENDENT */
-.dep-card{background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;padding:12px;margin-bottom:10px;position:relative}
-.dep-card .dep-num{font-size:12px;font-weight:700;color:#C9A84C;margin-bottom:8px}
-.btn-add-dep{background:transparent;border:1.5px dashed #8B1A1A;color:#8B1A1A;padding:9px;border-radius:8px;width:100%;cursor:pointer;font-size:13px;font-weight:600;margin-bottom:14px}
-.btn-rm{position:absolute;top:8px;right:8px;background:#fee2e2;border:none;color:#DC2626;border-radius:6px;padding:2px 8px;font-size:11px;cursor:pointer}
+  .officer-row{display:grid;grid-template-columns:1.3fr 1fr auto;gap:8px;margin-bottom:10px;align-items:center;}
+  @media (max-width:480px){.officer-row{grid-template-columns:1fr;}}
+  .officer-row input, .officer-row select{margin:0;}
+  .remove-officer{background:none;border:none;color:var(--danger);font-size:20px;cursor:pointer;padding:0 6px;line-height:1;}
 
-/* SIGNATURE */
-#sigCanvas{border:2px solid #D1D5DB;border-radius:8px;background:#fff;touch-action:none;width:100%;height:140px}
-.sig-actions{display:flex;gap:8px;margin-top:6px}
-.btn-clear{background:#f3f4f6;border:1px solid #D1D5DB;color:#374151;padding:7px 14px;border-radius:7px;font-size:13px;cursor:pointer}
+  .checklist-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);font-family:Arial, sans-serif;font-size:13.5px;}
+  .checklist-item:last-child{border-bottom:none;}
+  .checklist-item input{margin-top:3px;}
 
-/* NAVIGATION */
-.nav{display:flex;gap:10px;margin-top:20px}
-.btn-back{flex:1;background:#f3f4f6;border:1.5px solid #D1D5DB;color:#374151;padding:13px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
-.btn-next{flex:2;background:#8B1A1A;border:none;color:#fff;padding:13px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer}
-.btn-next:hover{background:#6B1414}
-.btn-submit{flex:2;background:#C9A84C;border:none;color:#1F2937;padding:13px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer}
+  .nav-buttons{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:30px;padding-bottom:10px;}
+  .nav-buttons .btn-primary{flex:1 1 100%;order:3;}
+  .nav-buttons .btn-secondary{order:1;}
+  .nav-buttons .btn-print{order:2;flex:1;}
+  @media (min-width:520px){
+    .nav-buttons .btn-primary{flex:1;order:2;}
+    .nav-buttons .btn-print{order:3;}
+  }
+  .btn{font-family:Arial, sans-serif;font-size:14.5px;font-weight:700;padding:13px 22px;border-radius:8px;border:none;cursor:pointer;}
+  .btn-primary{background:var(--burgundy);color:#fff;flex:1;}
+  .btn-primary:hover{background:var(--burgundy-dark);}
+  .btn-secondary{background:#fff;color:var(--ink-soft);border:1.5px solid var(--line);}
+  .btn-secondary:hover{border-color:var(--ink-soft);}
 
-/* SUCCESS */
-#success{display:none;padding:24px 16px;text-align:center}
-#success.show{display:block}
-.success-icon{font-size:56px;margin-bottom:12px}
-.success-num{background:#8B1A1A;color:#fff;display:inline-block;padding:8px 20px;border-radius:20px;font-weight:700;font-size:16px;margin:10px 0}
-.print-btns{display:flex;gap:10px;margin-top:16px;justify-content:center}
-.btn-print,.btn-pdf{padding:12px 20px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none}
-.btn-print{background:#8B1A1A;color:#fff}
-.btn-pdf{background:#C9A84C;color:#1F2937}
+  .file-number{font-family:Arial, sans-serif;font-size:11px;color:var(--ink-soft);text-align:right;padding:10px 24px 0;}
+  .file-number b{color:var(--burgundy);}
 
-/* FLOAT BAR */
-#float-bar{position:fixed;bottom:16px;right:16px;display:none;flex-direction:column;gap:8px;z-index:200}
-#float-bar button{width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-.fb-print{background:#8B1A1A;color:#fff}
-.fb-pdf{background:#C9A84C;color:#1F2937}
+  .success-screen{display:none;text-align:center;padding:60px 24px;}
+  .success-screen.active{display:block;}
+  .success-screen .check{width:64px;height:64px;border-radius:50%;background:var(--burgundy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px;}
+  .success-screen h2{margin-bottom:10px;}
+  .success-screen p{font-family:Arial, sans-serif;color:var(--ink-soft);font-size:14px;line-height:1.6;}
 
-/* ERROR */
-.err{color:#DC2626;font-size:12px;margin-top:3px;display:none}
+  footer{text-align:center;font-family:Arial, sans-serif;font-size:11px;color:var(--ink-soft);padding:24px;border-top:1px solid var(--line);margin-top:10px;}
 
-@media print{
-  #lang-bar,#float-bar,.nav,.progress-wrap{display:none!important}
-  .section{display:block!important}
-  .section-title{color:#8B1A1A!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-}
+  .btn-print{background:#fff;color:var(--burgundy);border:1.5px solid var(--gold);flex:0 0 auto;white-space:nowrap;}
+  .btn-print:hover{background:var(--gold-light);}
+
+  #printView{display:none;}
+  .print-section{margin-bottom:16px;}
+  .print-section h2{font-size:15px;border-bottom:2px solid var(--gold);padding-bottom:4px;margin-bottom:8px;}
+  .print-sub{font-family:Arial, sans-serif;font-weight:700;color:var(--burgundy);margin:10px 0 5px;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;}
+  .print-row{display:flex;justify-content:space-between;gap:16px;padding:3px 0;border-bottom:1px dotted var(--line);font-family:Arial, sans-serif;font-size:12px;}
+  .print-label{font-weight:700;color:var(--ink-soft);flex:0 0 52%;}
+  .print-value{flex:1;text-align:right;}
+  .print-file{font-family:Arial, sans-serif;font-size:12px;margin:8px 0 18px;color:var(--ink-soft);}
+
+  @media print{
+    body > .wrap > *:not(#printView){display:none !important;}
+    #printView{display:block !important;padding:6px;}
+    #printView header{background:none !important;color:var(--ink) !important;padding:0 0 10px !important;border:none !important;text-align:left !important;display:flex;align-items:center;gap:14px;}
+    #printView .logo-img{max-width:130px;padding:0;background:none;margin:0;}
+    #printView .doc-title{color:var(--ink) !important;}
+    #printView .doc-sub{color:var(--ink-soft) !important;}
+  }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<div class="wrap">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script></head>
-<body data-new-gr-c-s-check-loaded="14.1306.0" data-gr-ext-installed="">
+  <header>
+    <div class="lang-toggle">
+      <button type="button" id="btnEs" class="active" onclick="setLang('es')">ES</button>
+      <button type="button" id="btnEn" onclick="setLang('en')">EN</button>
+    </div>
+    <img class="logo-img" src="data:image/png;base64,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" alt="Avanty Services">
+    <p class="doc-title" data-i18n="hdr_title"></p>
+    <p class="doc-sub" data-i18n="hdr_sub"></p>
+  </header>
 
-<!-- LANG BAR -->
-<div id="lang-bar">
-  <button id="btn-es" class="active" onclick="setLang('es')">Español</button>
-  <button id="btn-en" onclick="setLang('en')">English</button>
-</div>
-
-<!-- HEADER -->
-<div class="header">
-  <div class="logo-wrap">
-    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNDIwIiB3aWR0aD0iOTAwIiBoZWlnaHQ9IjQyMCI+CiAgPGRlZnM+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9ImdvbGRHcmFkIiBjeD0iMzglIiBjeT0iMjglIiByPSI2NSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRjBEODcwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjQzlBODRDIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzhBNjAxOCIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjkwMCIgaGVpZ2h0PSI0MjAiIGZpbGw9IndoaXRlIi8+CgogIDwhLS0gTk8gQVJDIOKAlCByZW1vdmVkIGNvbXBsZXRlbHkgLS0+CgogIDwhLS0gNyBDUklNU09OIFBFVEFMUzogMMKwLDkwwrAsMTM1wrAsMTgwwrAsMjI1wrAsMjcwwrAsMzE1wrAg4oCUIGdhcCBhdCA0NcKwICh0b3AtcmlnaHQpIC0tPgogIDxwYXRoIGQ9Ik0gMjEwLDE4NiBDIDE5MCwxNjMgMTc1LDEyNCAxNzUsOTIgQyAxNzUsNjIgMjQ1LDYyIDI0NSw5MiBDIDI0NSwxMjQgMjMwLDE2MyAyMTAsMTg2IFoiCiAgICAgICAgZmlsbD0iIzhCMUExQSIgdHJhbnNmb3JtPSJyb3RhdGUoMCwyMTAsMjEwKSIvPgogIDxwYXRoIGQ9Ik0gMjEwLDE4NiBDIDE5MCwxNjMgMTc1LDEyNCAxNzUsOTIgQyAxNzUsNjIgMjQ1LDYyIDI0NSw5MiBDIDI0NSwxMjQgMjMwLDE2MyAyMTAsMTg2IFoiCiAgICAgICAgZmlsbD0iIzhCMUExQSIgdHJhbnNmb3JtPSJyb3RhdGUoOTAsMjEwLDIxMCkiLz4KICA8cGF0aCBkPSJNIDIxMCwxODYgQyAxOTAsMTYzIDE3NSwxMjQgMTc1LDkyIEMgMTc1LDYyIDI0NSw2MiAyNDUsOTIgQyAyNDUsMTI0IDIzMCwxNjMgMjEwLDE4NiBaIgogICAgICAgIGZpbGw9IiM4QjFBMUEiIHRyYW5zZm9ybT0icm90YXRlKDEzNSwyMTAsMjEwKSIvPgogIDxwYXRoIGQ9Ik0gMjEwLDE4NiBDIDE5MCwxNjMgMTc1LDEyNCAxNzUsOTIgQyAxNzUsNjIgMjQ1LDYyIDI0NSw5MiBDIDI0NSwxMjQgMjMwLDE2MyAyMTAsMTg2IFoiCiAgICAgICAgZmlsbD0iIzhCMUExQSIgdHJhbnNmb3JtPSJyb3RhdGUoMTgwLDIxMCwyMTApIi8+CiAgPHBhdGggZD0iTSAyMTAsMTg2IEMgMTkwLDE2MyAxNzUsMTI0IDE3NSw5MiBDIDE3NSw2MiAyNDUsNjIgMjQ1LDkyIEMgMjQ1LDEyNCAyMzAsMTYzIDIxMCwxODYgWiIKICAgICAgICBmaWxsPSIjOEIxQTFBIiB0cmFuc2Zvcm09InJvdGF0ZSgyMjUsMjEwLDIxMCkiLz4KICA8cGF0aCBkPSJNIDIxMCwxODYgQyAxOTAsMTYzIDE3NSwxMjQgMTc1LDkyIEMgMTc1LDYyIDI0NSw2MiAyNDUsOTIgQyAyNDUsMTI0IDIzMCwxNjMgMjEwLDE4NiBaIgogICAgICAgIGZpbGw9IiM4QjFBMUEiIHRyYW5zZm9ybT0icm90YXRlKDI3MCwyMTAsMjEwKSIvPgogIDxwYXRoIGQ9Ik0gMjEwLDE4NiBDIDE5MCwxNjMgMTc1LDEyNCAxNzUsOTIgQyAxNzUsNjIgMjQ1LDYyIDI0NSw5MiBDIDI0NSwxMjQgMjMwLDE2MyAyMTAsMTg2IFoiCiAgICAgICAgZmlsbD0iIzhCMUExQSIgdHJhbnNmb3JtPSJyb3RhdGUoMzE1LDIxMCwyMTApIi8+CgogIDwhLS0gV2hpdGUgY2VudGVyIC0tPgogIDxjaXJjbGUgY3g9IjIxMCIgY3k9IjIxMCIgcj0iMTciIGZpbGw9IndoaXRlIi8+CgogIDwhLS0gR09MRCBQRVRBTCBhdCA0NcKwICh0b3AtUklHSFQpLCBvZmZzZXQgMTRweCBvdXR3YXJkIC0tPgogIDxwYXRoIGQ9Ik0gMjEwLDE4NiBDIDE5MCwxNjMgMTc1LDEyNCAxNzUsOTIgQyAxNzUsNjIgMjQ1LDYyIDI0NSw5MiBDIDI0NSwxMjQgMjMwLDE2MyAyMTAsMTg2IFoiCiAgICAgICAgZmlsbD0idXJsKCNnb2xkR3JhZCkiIHRyYW5zZm9ybT0icm90YXRlKDQ1LDIxMCwyMTApIHRyYW5zbGF0ZSgwLC0xNCkiLz4KCiAgPCEtLSBURVhUIC0tPgogIDx0ZXh0IHg9IjM3OCIgeT0iMTg4IgogICAgICAgIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCdUaW1lcyBOZXcgUm9tYW4nLHNlcmlmIgogICAgICAgIGZvbnQtc2l6ZT0iOTAiIGZvbnQtd2VpZ2h0PSJib2xkIgogICAgICAgIGZpbGw9IiM4QjFBMUEiIGxldHRlci1zcGFjaW5nPSI0Ij5BVkFOVFk8L3RleHQ+CiAgPGxpbmUgeDE9IjM3OCIgeTE9IjIxNiIgeDI9IjQ1MiIgeTI9IjIxNiIgc3Ryb2tlPSIjQzlBODRDIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDxsaW5lIHgxPSI2NzIiIHkxPSIyMTYiIHgyPSI3NDgiIHkyPSIyMTYiIHN0cm9rZT0iI0M5QTg0QyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8dGV4dCB4PSI1NjIiIHk9IjIzMiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsJ1RpbWVzIE5ldyBSb21hbicsc2VyaWYiCiAgICAgICAgZm9udC1zaXplPSIyNyIgZmlsbD0iIzY2NjY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjExIj5TRVJWSUNFUzwvdGV4dD4KICA8bGluZSB4MT0iMzk1IiB5MT0iMjcwIiB4Mj0iNDU4IiB5Mj0iMjcwIiBzdHJva2U9IiNDOUE4NEMiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGxpbmUgeDE9IjY2NCIgeTE9IjI3MCIgeDI9IjcyOCIgeTI9IjI3MCIgc3Ryb2tlPSIjQzlBODRDIiBzdHJva2Utd2lkdGg9IjEuNSIvPgogIDx0ZXh0IHg9IjU2MiIgeT0iMjg0IiBmb250LWZhbWlseT0iR2VvcmdpYSwnVGltZXMgTmV3IFJvbWFuJyxzZXJpZiIKICAgICAgICBmb250LXNpemU9IjIwIiBmaWxsPSIjQzlBODRDIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIgogICAgICAgIGxldHRlci1zcGFjaW5nPSI2IiBmb250LXdlaWdodD0iYm9sZCI+U0lOQ0UgMjAwNDwvdGV4dD4KPC9zdmc+Cg==" alt="Avanty Services" style="height:60px;width:auto;display:block;">
-  </div>
-  <div class="header-title">
-    <h1 id="h-title">Cuestionario del Cliente</h1>
-    <p id="h-sub">T.M. Financial Services LLC</p>
-  </div>
-</div>
-
-<!-- PROGRESS -->
-<div class="progress-wrap" id="prog-wrap">
-  <div class="progress-label"><span id="prog-text">Sección 1 / 8</span></div>
-  <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:12.5%"></div></div>
-  <div class="step-dots" id="step-dots">
-    <div class="dot current" onclick="goTo(1)">1</div>
-    <div class="dot" onclick="goTo(2)">2</div>
-    <div class="dot" onclick="goTo(3)">3</div>
-    <div class="dot" onclick="goTo(4)">4</div>
-    <div class="dot" onclick="goTo(5)">5</div>
-    <div class="dot" onclick="goTo(6)">6</div>
-    <div class="dot" onclick="goTo(7)">7</div>
-    <div class="dot" onclick="goTo(8)">8</div>
-  </div>
-</div>
-
-<!-- ===== SECTION 1: INFO PERSONAL ===== -->
-<div class="section active" id="step-1">
-  <div class="section-title" id="s1-title">1. Información Personal</div>
-  <div class="section-sub" id="s1-sub">Complete todos los campos requeridos *</div>
-
-  <div class="field">
-    <label id="l-fname">Nombre *</label>
-    <input type="text" id="fname" placeholder="Nombre(s)">
-  </div>
-  <div class="field">
-    <label id="l-lname">Apellido(s) *</label>
-    <input type="text" id="lname" placeholder="Apellido(s)">
-  </div>
-  <div class="field">
-    <label id="l-ssn">SSN / ITIN *</label>
-    <input type="text" id="ssn" placeholder="XXX-XX-XXXX" maxlength="11">
-  </div>
-  <div class="field">
-    <label id="l-dob">Fecha de Nacimiento *</label>
-    <div class="date-row">
-      <select id="dob-m"><option value="">Mes</option>
-        <option>01</option><option>02</option><option>03</option><option>04</option>
-        <option>05</option><option>06</option><option>07</option><option>08</option>
-        <option>09</option><option>10</option><option>11</option><option>12</option>
-      </select>
-      <select id="dob-d"><option value="">Día</option></select>
-      <select id="dob-y"><option value="">Año</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option><option>2017</option><option>2016</option><option>2015</option><option>2014</option><option>2013</option><option>2012</option><option>2011</option><option>2010</option><option>2009</option><option>2008</option><option>2007</option><option>2006</option><option>2005</option><option>2004</option><option>2003</option><option>2002</option><option>2001</option><option>2000</option><option>1999</option><option>1998</option><option>1997</option><option>1996</option><option>1995</option><option>1994</option><option>1993</option><option>1992</option><option>1991</option><option>1990</option><option>1989</option><option>1988</option><option>1987</option><option>1986</option><option>1985</option><option>1984</option><option>1983</option><option>1982</option><option>1981</option><option>1980</option><option>1979</option><option>1978</option><option>1977</option><option>1976</option><option>1975</option><option>1974</option><option>1973</option><option>1972</option><option>1971</option><option>1970</option><option>1969</option><option>1968</option><option>1967</option><option>1966</option><option>1965</option><option>1964</option><option>1963</option><option>1962</option><option>1961</option><option>1960</option><option>1959</option><option>1958</option><option>1957</option><option>1956</option><option>1955</option><option>1954</option><option>1953</option><option>1952</option><option>1951</option><option>1950</option><option>1949</option><option>1948</option><option>1947</option><option>1946</option><option>1945</option><option>1944</option><option>1943</option><option>1942</option><option>1941</option><option>1940</option><option>1939</option><option>1938</option><option>1937</option><option>1936</option><option>1935</option><option>1934</option><option>1933</option><option>1932</option><option>1931</option><option>1930</option></select>
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label">
+      <span id="stepLabel"></span>
+      <span id="stepName"></span>
     </div>
   </div>
-  <div class="field">
-    <label id="l-phone">Teléfono *</label>
-    <input type="tel" id="phone" placeholder="(818) 000-0000">
-  </div>
-  <div class="field">
-    <label id="l-email">Correo Electrónico</label>
-    <input type="email" id="email" placeholder="correo@email.com">
-  </div>
-  <div class="field">
-    <label id="l-address">Dirección *</label>
-    <input type="text" id="address" placeholder="Calle y número">
-  </div>
-  <div class="row2">
-    <div class="field"><label id="l-city">Ciudad *</label><input type="text" id="city"></div>
-    <div class="field"><label id="l-state">Estado *</label>
-      <select id="state">
-        <option value="">—</option>
-        <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
-        <option selected="">CA</option><option>CO</option><option>CT</option><option>DE</option>
-        <option>FL</option><option>GA</option><option>HI</option><option>ID</option>
-        <option>IL</option><option>IN</option><option>IA</option><option>KS</option>
-        <option>KY</option><option>LA</option><option>ME</option><option>MD</option>
-        <option>MA</option><option>MI</option><option>MN</option><option>MS</option>
-        <option>MO</option><option>MT</option><option>NE</option><option>NV</option>
-        <option>NH</option><option>NJ</option><option>NM</option><option>NY</option>
-        <option>NC</option><option>ND</option><option>OH</option><option>OK</option>
-        <option>OR</option><option>PA</option><option>RI</option><option>SC</option>
-        <option>SD</option><option>TN</option><option>TX</option><option>UT</option>
-        <option>VT</option><option>VA</option><option>WA</option><option>WV</option>
-        <option>WI</option><option>WY</option>
-      </select>
-    </div>
-  </div>
-  <div class="field"><label id="l-zip">ZIP *</label><input type="text" id="zip" maxlength="5" placeholder="91234"></div>
-  <div class="field">
-    <label id="l-filing">Estado Civil / Filing Status *</label>
-    <div class="options">
-      <label class="opt"><input type="radio" name="filing" value="Single"> <span id="o-single">Soltero(a)</span></label>
-      <label class="opt"><input type="radio" name="filing" value="MFJ"> <span id="o-mfj">Casado(a) Conjunto</span></label>
-      <label class="opt"><input type="radio" name="filing" value="MFS"> <span id="o-mfs">Casado(a) Separado</span></label>
-      <label class="opt"><input type="radio" name="filing" value="HH"> <span id="o-hh">Jefe de Familia</span></label>
-      <label class="opt"><input type="radio" name="filing" value="QW"> <span id="o-qw">Viudo(a) Calificado</span></label>
-    </div>
-  </div>
-  <div class="nav">
-    <button class="btn-next" onclick="next(1)"><span id="btn-next1">Siguiente →</span></button>
-  </div>
-</div>
 
-<!-- ===== SECTION 2: HISTORIAL FISCAL ===== -->
-<div class="section" id="step-2">
-  <div class="section-title" id="s2-title">2. Historial Fiscal</div>
-  <div class="section-sub" id="s2-sub">Información sobre años anteriores</div>
+  <div class="file-number"><span data-i18n="fileNumLabel"></span> <b id="fileNumber">AVT-ABC-2026-0000</b></div>
 
-  <div class="field">
-    <label id="l-taxyear">Año fiscal a preparar *</label>
-    <select id="taxyear">
-      <option>2024</option><option>2023</option><option>2022</option>
-      <option>2021</option><option>2020</option>
-    </select>
-  </div>
-  <div class="field">
-    <label id="l-filed-before">¿Ha presentado impuestos antes?</label>
-    <div class="options">
-      <label class="opt"><input type="radio" name="filed" value="si"> <span id="o-yes">Sí</span></label>
-      <label class="opt"><input type="radio" name="filed" value="no"> <span id="o-no">No</span></label>
-    </div>
-  </div>
-  <div class="field">
-    <label id="l-prev-preparer">¿Quién preparó sus impuestos el año pasado?</label>
-    <input type="text" id="prev-preparer" placeholder="Nombre / empresa">
-  </div>
-  <div class="field">
-    <label id="l-owe">¿Tuvo balance a deber o a favor el año pasado?</label>
-    <div class="options">
-      <label class="opt"><input type="radio" name="owe" value="deber"> <span id="o-owe">A deber</span></label>
-      <label class="opt"><input type="radio" name="owe" value="favor"> <span id="o-refund">A favor / Reembolso</span></label>
-      <label class="opt"><input type="radio" name="owe" value="cero"> <span id="o-zero">$0</span></label>
-      <label class="opt"><input type="radio" name="owe" value="nose"> <span id="o-dontknow">No sé</span></label>
-    </div>
-  </div>
-  <div class="field">
-    <label id="l-irs-letters">¿Recibió cartas del IRS o FTB este año?</label>
-    <div class="options">
-      <label class="opt"><input type="radio" name="irs" value="si"> <span>Sí</span></label>
-      <label class="opt"><input type="radio" name="irs" value="no"> <span>No</span></label>
-    </div>
-  </div>
-  <div class="field">
-    <label id="l-irs-detail">Si recibió cartas, explique brevemente:</label>
-    <textarea id="irs-detail" placeholder="Tipo de carta, número de carta, año..."></textarea>
-  </div>
-  <div class="nav">
-    <button class="btn-back" onclick="back(2)"><span id="btn-back2">← Atrás</span></button>
-    <button class="btn-next" onclick="next(2)"><span id="btn-next2">Siguiente →</span></button>
-  </div>
-</div>
+  <form id="cuestionario" name="cuestionario-licencia-alcohol" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="cuestionario-licencia-alcohol">
+    <p style="display:none;"><label>No llenar: <input name="bot-field"></label></p>
+    <input type="hidden" name="Expediente" id="expedienteField" value="">
+    <input type="hidden" name="Idioma" id="idiomaField" value="">
+    <input type="hidden" name="Solicitantes_Resumen" id="solicitantesField" value="">
+    <input type="hidden" name="Oficiales_Resumen" id="oficialesField" value="">
 
-<!-- ===== SECTION 3: CÓNYUGE Y DEPENDIENTES ===== -->
-<div class="section" id="step-3">
-  <div class="section-title" id="s3-title">3. Cónyuge y Dependientes</div>
-  <div class="section-sub" id="s3-sub">Si aplica</div>
+    <!-- STEP 1 -->
+    <div class="step active" data-step="1">
+      <p class="step-eyebrow" data-i18n="s1_eyebrow"></p>
+      <h2 data-i18n="s1_h2"></h2>
+      <p class="step-help" data-i18n="s1_help"></p>
 
-  <div class="subsec" id="spouse-sec">
-    <div class="subsec-title" id="ss-spouse">Información del Cónyuge</div>
-    <div class="field"><label id="l-spname">Nombre completo</label><input type="text" id="sp-name"></div>
-    <div class="field"><label id="l-spssn">SSN / ITIN del cónyuge</label><input type="text" id="sp-ssn" placeholder="XXX-XX-XXXX" maxlength="11"></div>
-    <div class="field">
-      <label id="l-spdob">Fecha de nacimiento</label>
-      <div class="date-row">
-        <select id="sp-dob-m"><option value="">Mes</option>
-          <option>01</option><option>02</option><option>03</option><option>04</option>
-          <option>05</option><option>06</option><option>07</option><option>08</option>
-          <option>09</option><option>10</option><option>11</option><option>12</option>
+      <div class="field">
+        <label data-i18n="s1_dba"></label>
+        <input type="text" name="dba">
+      </div>
+      <div class="field">
+        <label data-i18n="s1_legalName"></label>
+        <input type="text" name="legalName">
+      </div>
+      <div class="field">
+        <label data-i18n="s1_entityType"></label>
+        <select name="entityType">
+          <option value="" data-i18n="opt_select"></option>
+          <option value="Dueño único" data-i18n="ent_sole"></option>
+          <option value="Sociedad general" data-i18n="ent_genPartner"></option>
+          <option value="Sociedad en comandita" data-i18n="ent_limPartner"></option>
+          <option value="LLC" data-i18n="ent_llc"></option>
+          <option value="Corporación" data-i18n="ent_corp"></option>
+          <option value="Pareja casada" data-i18n="ent_marriedCouple"></option>
+          <option value="Otro" data-i18n="opt_other"></option>
         </select>
-        <select id="sp-dob-d"><option value="">Día</option></select>
-        <select id="sp-dob-y"><option value="">Año</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020</option><option>2019</option><option>2018</option><option>2017</option><option>2016</option><option>2015</option><option>2014</option><option>2013</option><option>2012</option><option>2011</option><option>2010</option><option>2009</option><option>2008</option><option>2007</option><option>2006</option><option>2005</option><option>2004</option><option>2003</option><option>2002</option><option>2001</option><option>2000</option><option>1999</option><option>1998</option><option>1997</option><option>1996</option><option>1995</option><option>1994</option><option>1993</option><option>1992</option><option>1991</option><option>1990</option><option>1989</option><option>1988</option><option>1987</option><option>1986</option><option>1985</option><option>1984</option><option>1983</option><option>1982</option><option>1981</option><option>1980</option><option>1979</option><option>1978</option><option>1977</option><option>1976</option><option>1975</option><option>1974</option><option>1973</option><option>1972</option><option>1971</option><option>1970</option><option>1969</option><option>1968</option><option>1967</option><option>1966</option><option>1965</option><option>1964</option><option>1963</option><option>1962</option><option>1961</option><option>1960</option><option>1959</option><option>1958</option><option>1957</option><option>1956</option><option>1955</option><option>1954</option><option>1953</option><option>1952</option><option>1951</option><option>1950</option><option>1949</option><option>1948</option><option>1947</option><option>1946</option><option>1945</option><option>1944</option><option>1943</option><option>1942</option><option>1941</option><option>1940</option><option>1939</option><option>1938</option><option>1937</option><option>1936</option><option>1935</option><option>1934</option><option>1933</option><option>1932</option><option>1931</option><option>1930</option></select>
+      </div>
+      <div class="field">
+        <label data-i18n="s1_premisesAddress"></label>
+        <input type="text" name="premisesAddress">
+      </div>
+      <div class="row3">
+        <div class="field"><label data-i18n="s1_city"></label><input type="text" name="premisesCity"></div>
+        <div class="field"><label data-i18n="s1_state"></label><input type="text" name="premisesState" value="CA"></div>
+        <div class="field"><label data-i18n="s1_zip"></label><input type="text" name="premisesZip"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label data-i18n="s1_phone"></label><input type="tel" name="premisesPhone"></div>
+        <div class="field"><label data-i18n="s1_email"></label><input type="email" name="email"></div>
+      </div>
+      <div class="field">
+        <label data-i18n="s1_licenseType"></label>
+        <select name="licenseType">
+          <option value="" data-i18n="opt_select"></option>
+          <option>20 — Off-Sale Beer &amp; Wine</option>
+          <option>21 — Off-Sale General</option>
+          <option>40 — On-Sale Beer</option>
+          <option value="41" data-i18n="lic41"></option>
+          <option value="42" data-i18n="lic42"></option>
+          <option value="47" data-i18n="lic47"></option>
+          <option value="48" data-i18n="lic48"></option>
+          <option value="Otro" data-i18n="opt_other"></option>
+        </select>
+      </div>
+      <fieldset>
+        <legend data-i18n="s1_transactionType"></legend>
+        <div class="radio-row">
+          <label><input type="radio" name="transactionType" value="Original"> <span data-i18n="tt_original"></span></label>
+          <label><input type="radio" name="transactionType" value="Persona a Persona"> <span data-i18n="tt_p2p"></span></label>
+          <label><input type="radio" name="transactionType" value="Local a Local"> <span data-i18n="tt_prem2prem"></span></label>
+          <label><input type="radio" name="transactionType" value="Intercambio"> <span data-i18n="tt_exchange"></span></label>
+          <label><input type="radio" name="transactionType" value="Otro"> <span data-i18n="opt_other"></span></label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label data-i18n="s1_tempPermit"></label>
+        <div class="radio-row">
+          <label><input type="radio" name="tempPermit" value="Sí"> <span data-i18n="yes"></span></label>
+          <label><input type="radio" name="tempPermit" value="No"> <span data-i18n="no"></span></label>
+        </div>
       </div>
     </div>
-    <div class="field"><label id="l-spemail">Email del cónyuge</label><input type="email" id="sp-email"></div>
-  </div>
 
-  <div id="deps-wrap">
-    <div class="subsec-title" id="ss-deps" style="margin-bottom:10px">Dependientes</div>
-    <div id="dep-list"></div>
-    <button class="btn-add-dep" onclick="addDep()" id="btn-add-dep">+ Agregar Dependiente</button>
-  </div>
+    <!-- STEP 2 -->
+    <div class="step" data-step="2">
+      <p class="step-eyebrow" data-i18n="s2_eyebrow"></p>
+      <h2 data-i18n="s2_h2"></h2>
+      <p class="step-help" data-i18n="s2_help"></p>
 
-  <div class="nav">
-    <button class="btn-back" onclick="back(3)"><span id="btn-back3">← Atrás</span></button>
-    <button class="btn-next" onclick="next(3)"><span id="btn-next3">Siguiente →</span></button>
-  </div>
-</div>
-
-<!-- ===== SECTION 4: INGRESOS ===== -->
-<div class="section" id="step-4">
-  <div class="section-title" id="s4-title">4. Ingresos</div>
-  <div class="section-sub" id="s4-sub">Seleccione todas las fuentes que apliquen</div>
-
-  <div class="field">
-    <label id="l-income-types">Tipos de ingresos recibidos en el año:</label>
-    <div style="margin-top:8px">
-      <label class="check-opt"><input type="checkbox" id="inc-w2"> <span id="o-w2">W-2 (empleado)</span></label>
-      <label class="check-opt"><input type="checkbox" id="inc-1099nec"> <span id="o-1099nec">1099-NEC (contratista independiente)</span></label>
-      <label class="check-opt"><input type="checkbox" id="inc-1099misc"> <span id="o-1099misc">1099-MISC</span></label>
-      <label class="check-opt"><input type="checkbox" id="inc-1099g"> <span id="o-1099g">1099-G (desempleo / reembolso estatal)</span></label>
-      <label class="check-opt"><input type="checkbox" id="inc-1099r"> <span id="o-1099r">1099-R (pensión / retiro)</span></label>
-      <label class="check-opt"><input type="checkbox" id="inc-ssa"> <span id="o-ssa">SSA-1099 (Seguro Social)</span></label>
-      <label class="check-opt"><input type="checkbox" id="inc-rent"> <span id="o-rent">Ingresos por renta</span></label>
-      <label class="check-opt"><input type="checkbox" id="inc-biz"> <span id="o-biz">Negocio propio (Schedule C)</span></label>
-      <label class="check-opt"><input type="checkbox" id="inc-invest"> <span id="o-invest">Inversiones / dividendos (1099-DIV / 1099-INT)</span></label>
-      <label class="check-opt"><input type="checkbox" id="inc-crypto"> <span id="o-crypto">Criptomonedas</span></label>
-      <label class="check-opt"><input type="checkbox" id="inc-other"> <span id="o-other-inc">Otros ingresos</span></label>
+      <div class="field"><label data-i18n="s2_sellerName"></label><input type="text" name="sellerName"></div>
+      <div class="field"><label data-i18n="s2_sellerLicenseNumber"></label><input type="text" name="sellerLicenseNumber"></div>
+      <div class="field"><label data-i18n="s2_sellerAddress"></label><input type="text" name="sellerAddress"></div>
+      <div class="row2">
+        <div class="field"><label data-i18n="s2_sellerPhone"></label><input type="tel" name="sellerPhone"></div>
+        <div class="field"><label data-i18n="s2_sellerOperating"></label>
+          <select name="sellerOperating"><option value="" data-i18n="opt_select"></option><option value="Sí" data-i18n="yes"></option><option value="No" data-i18n="no"></option></select>
+        </div>
+      </div>
+      <div class="field"><label data-i18n="s2_sellerClosedDate"></label><input type="date" name="sellerClosedDate"></div>
     </div>
-  </div>
-  <div class="field">
-    <label id="l-other-inc">Especifique otros ingresos:</label>
-    <input type="text" id="other-inc-detail">
-  </div>
-  <div class="field">
-    <label id="l-employers">Nombre(s) de empleadores / pagadores principales:</label>
-    <textarea id="employers" placeholder="Empresa 1, Empresa 2..."></textarea>
-  </div>
-  <div class="nav">
-    <button class="btn-back" onclick="back(4)"><span id="btn-back4">← Atrás</span></button>
-    <button class="btn-next" onclick="next(4)"><span id="btn-next4">Siguiente →</span></button>
-  </div>
-</div>
 
-<!-- ===== SECTION 5: DEDUCCIONES ===== -->
-<div class="section" id="step-5">
-  <div class="section-title" id="s5-title">5. Deducciones y Créditos</div>
-  <div class="section-sub" id="s5-sub">Seleccione todo lo que aplique</div>
+    <!-- STEP 3 -->
+    <div class="step" data-step="3">
+      <p class="step-eyebrow" data-i18n="s3_eyebrow"></p>
+      <h2 data-i18n="s3_h2"></h2>
+      <p class="step-help" data-i18n="s3_help"></p>
 
-  <div class="field">
-    <label id="l-ded">Deducciones / situaciones especiales:</label>
-    <div style="margin-top:8px">
-      <label class="check-opt"><input type="checkbox" id="ded-mortgage"> <span id="o-mortgage">Intereses de hipoteca (Form 1098)</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-charity"> <span id="o-charity">Donaciones de caridad</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-student"> <span id="o-student">Préstamo estudiantil (Form 1098-E)</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-hsa"> <span id="o-hsa">HSA / MSA (Form 1099-SA)</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-ira"> <span id="o-ira">Aportación a IRA / 401k</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-edu"> <span id="o-edu">Gastos de educación (Form 1098-T)</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-biz-exp"> <span id="o-biz-exp">Gastos de negocio propio</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-home-off"> <span id="o-home-off">Oficina en casa</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-vehicle"> <span id="o-vehicle">Uso del vehículo para trabajo</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-childcare"> <span id="o-childcare">Gastos de cuidado de hijos (Form 2441)</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-energy"> <span id="o-energy">Mejoras de energía en hogar</span></label>
-      <label class="check-opt"><input type="checkbox" id="ded-alimony"> <span id="o-alimony">Pensión alimenticia pagada</span></label>
+      <div id="personsContainer"></div>
+      <button type="button" class="add-btn" id="addPerson" data-i18n="s3_addPerson"></button>
     </div>
-  </div>
-  <div class="field">
-    <label id="l-notes-ded">Notas adicionales sobre deducciones:</label>
-    <textarea id="notes-ded" placeholder="Detalles adicionales..."></textarea>
-  </div>
-  <div class="nav">
-    <button class="btn-back" onclick="back(5)"><span id="btn-back5">← Atrás</span></button>
-    <button class="btn-next" onclick="next(5)"><span id="btn-next5">Siguiente →</span></button>
-  </div>
-</div>
 
-<!-- ===== SECTION 6: ESTATUS MIGRATORIO ===== -->
-<div class="section" id="step-6">
-  <div class="section-title" id="s6-title">6. Estatus Migratorio</div>
-  <div class="section-sub" id="s6-sub">Esta información es confidencial</div>
+    <!-- STEP 4 -->
+    <div class="step" data-step="4">
+      <p class="step-eyebrow" data-i18n="s4_eyebrow"></p>
+      <h2 data-i18n="s4_h2"></h2>
+      <p class="step-help" data-i18n="s4_help"></p>
 
-  <div class="field">
-    <label id="l-citizen">Estatus migratorio *</label>
-    <div class="options" style="flex-direction:column">
-      <label class="opt"><input type="radio" name="citizen" value="citizen"> <span id="o-citizen">Ciudadano(a) americano(a)</span></label>
-      <label class="opt"><input type="radio" name="citizen" value="pr"> <span id="o-pr">Residente Permanente (Green Card)</span></label>
-      <label class="opt"><input type="radio" name="citizen" value="visa"> <span id="o-visa">Visa de trabajo (H1B, L1, O1, etc.)</span></label>
-      <label class="opt"><input type="radio" name="citizen" value="itin"> <span id="o-itin">ITIN / Sin estatus legal</span></label>
-      <label class="opt"><input type="radio" name="citizen" value="other"> <span id="o-other-cit">Otro</span></label>
+      <fieldset>
+        <legend data-i18n="s4_leg1"></legend>
+        <div class="field">
+          <label data-i18n="s4_q1"></label>
+          <div class="radio-row"><label><input type="radio" name="tiedhouse_ca" value="Sí"> <span data-i18n="yes"></span></label><label><input type="radio" name="tiedhouse_ca" value="No"> <span data-i18n="no"></span></label></div>
+        </div>
+        <div class="field">
+          <label data-i18n="s4_q2"></label>
+          <div class="radio-row"><label><input type="radio" name="tiedhouse_outside" value="Sí"> <span data-i18n="yes"></span></label><label><input type="radio" name="tiedhouse_outside" value="No"> <span data-i18n="no"></span></label></div>
+        </div>
+        <div class="field">
+          <label data-i18n="s4_q3"></label>
+          <div class="radio-row"><label><input type="radio" name="tiedhouse_employed" value="Sí"> <span data-i18n="yes"></span></label><label><input type="radio" name="tiedhouse_employed" value="No"> <span data-i18n="no"></span></label></div>
+        </div>
+        <div class="field">
+          <label data-i18n="s4_details"></label>
+          <textarea name="tiedhouse_details"></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="s4_leg2"></legend>
+        <div class="field">
+          <label data-i18n="s4_q4"></label>
+          <div class="radio-row"><label><input type="radio" name="abcHistory" value="Sí"> <span data-i18n="yes"></span></label><label><input type="radio" name="abcHistory" value="No"> <span data-i18n="no"></span></label></div>
+        </div>
+        <div class="field">
+          <label data-i18n="s4_details2"></label>
+          <textarea name="abcHistoryDetails"></textarea>
+        </div>
+      </fieldset>
     </div>
-  </div>
-  <div class="field">
-    <label id="l-foreign-income">¿Tuvo ingresos fuera de EE.UU. este año?</label>
-    <div class="options">
-      <label class="opt"><input type="radio" name="foreign" value="si"> <span>Sí</span></label>
-      <label class="opt"><input type="radio" name="foreign" value="no"> <span>No</span></label>
-    </div>
-  </div>
-  <div class="field">
-    <label id="l-foreign-accounts">¿Tiene cuentas bancarias fuera de EE.UU.?</label>
-    <div class="options">
-      <label class="opt"><input type="radio" name="fbar" value="si"> <span>Sí</span></label>
-      <label class="opt"><input type="radio" name="fbar" value="no"> <span>No</span></label>
-    </div>
-  </div>
-  <div class="nav">
-    <button class="btn-back" onclick="back(6)"><span id="btn-back6">← Atrás</span></button>
-    <button class="btn-next" onclick="next(6)"><span id="btn-next6">Siguiente →</span></button>
-  </div>
-</div>
 
-<!-- ===== SECTION 7: DOCUMENTOS Y DEPÓSITO ===== -->
-<div class="section" id="step-7">
-  <div class="section-title" id="s7-title">7. Documentos y Depósito Directo</div>
-  <div class="section-sub" id="s7-sub">Marque los documentos que trae / enviará</div>
+    <!-- STEP 5 -->
+    <div class="step" data-step="5">
+      <p class="step-eyebrow" data-i18n="s5_eyebrow"></p>
+      <h2 data-i18n="s5_h2"></h2>
+      <p class="step-help" data-i18n="s5_help"></p>
 
-  <div class="field">
-    <label id="l-docs">Documentos disponibles:</label>
-    <div style="margin-top:8px">
-      <label class="check-opt"><input type="checkbox" id="doc-w2"> <span>W-2(s)</span></label>
-      <label class="check-opt"><input type="checkbox" id="doc-1099"> <span>1099(s)</span></label>
-      <label class="check-opt"><input type="checkbox" id="doc-id"> <span id="o-doc-id">Identificación con foto</span></label>
-      <label class="check-opt"><input type="checkbox" id="doc-itin"> <span id="o-doc-itin">Carta ITIN</span></label>
-      <label class="check-opt"><input type="checkbox" id="doc-ss"> <span id="o-doc-ss">Tarjeta de Seguro Social</span></label>
-      <label class="check-opt"><input type="checkbox" id="doc-prev"> <span id="o-doc-prev">Declaración del año anterior</span></label>
-      <label class="check-opt"><input type="checkbox" id="doc-1098"> <span>1098 (hipoteca / estudiante)</span></label>
-      <label class="check-opt"><input type="checkbox" id="doc-biz"> <span id="o-doc-biz">Registros de negocio / gastos</span></label>
-      <label class="check-opt"><input type="checkbox" id="doc-other"> <span id="o-doc-other">Otros documentos</span></label>
+      <div class="row2">
+        <div class="field"><label data-i18n="s5_totalContribution"></label><input type="text" name="totalContribution" placeholder="$"></div>
+        <div class="field"><label data-i18n="s5_cashContribution"></label><input type="text" name="cashContribution" placeholder="$"></div>
+      </div>
+
+      <fieldset>
+        <legend data-i18n="s5_legA"></legend>
+        <div class="row2">
+          <div class="field"><label data-i18n="s5_bankName"></label><input type="text" name="bankName"></div>
+          <div class="field"><label data-i18n="s5_bankAmount"></label><input type="text" name="bankAmount" placeholder="$"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="s5_legB"></legend>
+        <div class="row2">
+          <div class="field"><label data-i18n="s5_loanLender"></label><input type="text" name="loanLender"></div>
+          <div class="field"><label data-i18n="s5_loanAmount"></label><input type="text" name="loanAmount" placeholder="$"></div>
+        </div>
+        <div class="field"><label data-i18n="s5_loanTerms"></label><input type="text" name="loanTerms"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="s5_legC"></legend>
+        <div class="row2">
+          <div class="field"><label data-i18n="s5_propertySold"></label><input type="text" name="propertySold"></div>
+          <div class="field"><label data-i18n="s5_propertyAmount"></label><input type="text" name="propertyAmount" placeholder="$"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="s5_legD"></legend>
+        <div class="field"><label data-i18n="s5_otherSource"></label><input type="text" name="otherSource"></div>
+      </fieldset>
     </div>
-  </div>
 
-  <div class="subsec" style="margin-top:14px">
-    <div class="subsec-title" id="ss-dd">Depósito Directo del Reembolso</div>
-    <div class="field"><label id="l-bank">Banco</label><input type="text" id="bank" placeholder="Nombre del banco"></div>
-    <div class="field"><label id="l-routing">Número de Ruta (Routing #)</label><input type="text" id="routing" maxlength="9" placeholder="9 dígitos"></div>
-    <div class="field"><label id="l-account">Número de Cuenta</label><input type="text" id="account" placeholder="Número de cuenta"></div>
-    <div class="field">
-      <label id="l-acct-type">Tipo de cuenta</label>
-      <div class="options">
-        <label class="opt"><input type="radio" name="acct-type" value="checking"> <span id="o-checking">Checking</span></label>
-        <label class="opt"><input type="radio" name="acct-type" value="savings"> <span id="o-savings">Savings</span></label>
+    <!-- STEP 6 -->
+    <div class="step" data-step="6">
+      <p class="step-eyebrow" data-i18n="s6_eyebrow"></p>
+      <h2 data-i18n="s6_h2"></h2>
+      <p class="step-help" data-i18n="s6_help"></p>
+
+      <div class="row2">
+        <div class="field"><label data-i18n="s6_incorpDate"></label><input type="date" name="incorpDate"></div>
+        <div class="field"><label data-i18n="s6_incorpState"></label><input type="text" name="incorpState" value="CA"></div>
+      </div>
+      <div class="field"><label data-i18n="s6_sosFileNumber"></label><input type="text" name="sosFileNumber"></div>
+      <div class="row2">
+        <div class="field"><label data-i18n="s6_corpBankName"></label><input type="text" name="corpBankName"></div>
+        <div class="field"><label data-i18n="s6_corpBankAccount"></label><input type="text" name="corpBankAccount"></div>
+      </div>
+      <div class="field">
+        <label data-i18n="s6_officers"></label>
+        <div id="officersContainer"></div>
+        <button type="button" class="add-btn" id="addOfficer" data-i18n="s6_addOfficer"></button>
+      </div>
+      <div class="field">
+        <label data-i18n="s6_llcMemberRun"></label>
+        <div class="radio-row"><label><input type="radio" name="llcMemberRun" value="Sí"> <span data-i18n="yes"></span></label><label><input type="radio" name="llcMemberRun" value="No"> <span data-i18n="no"></span></label></div>
       </div>
     </div>
-  </div>
-  <div class="nav">
-    <button class="btn-back" onclick="back(7)"><span id="btn-back7">← Atrás</span></button>
-    <button class="btn-next" onclick="next(7)"><span id="btn-next7">Siguiente →</span></button>
-  </div>
-</div>
 
-<!-- ===== SECTION 8: FIRMA ===== -->
-<div class="section" id="step-8">
-  <div class="section-title" id="s8-title">8. Firma y Confirmación</div>
-  <div class="section-sub" id="s8-sub">Lea y firme para completar</div>
+    <!-- STEP 7 -->
+    <div class="step" data-step="7">
+      <p class="step-eyebrow" data-i18n="s7_eyebrow"></p>
+      <h2 data-i18n="s7_h2"></h2>
 
-  <div style="background:#FFF5F5;border:1px solid #8B1A1A;border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.6" id="auth-text">
-    Certifico que la información proporcionada en este cuestionario es verdadera, correcta y completa. 
-    Autorizo a T.M. Financial Services LLC / Avanty Services a preparar mi declaración de impuestos 
-    con base en la información aquí suministrada. Entiendo que soy responsable de la exactitud de 
-    los datos proporcionados.
-  </div>
-
-  <div class="field">
-    <label id="l-sig">Firma digital *</label>
-    <canvas id="sigCanvas" width="400" height="140"></canvas>
-    <div class="sig-actions">
-      <button class="btn-clear" onclick="clearSig()" id="btn-clear-sig">Borrar firma</button>
+      <div class="field">
+        <label data-i18n="s7_ownership"></label>
+        <div class="radio-row"><label><input type="radio" name="premisesOwnership" value="Rentado"> <span data-i18n="rented"></span></label><label><input type="radio" name="premisesOwnership" value="Propio"> <span data-i18n="owned"></span></label></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label data-i18n="s7_landlordName"></label><input type="text" name="landlordName"></div>
+        <div class="field"><label data-i18n="s7_landlordPhone"></label><input type="tel" name="landlordPhone"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label data-i18n="s7_monthlyRent"></label><input type="text" name="monthlyRent" placeholder="$"></div>
+        <div class="field"><label data-i18n="s7_leaseExpiration"></label><input type="date" name="leaseExpiration"></div>
+      </div>
+      <div class="field"><label data-i18n="s7_crossStreet"></label><input type="text" name="crossStreet"></div>
+      <div class="field">
+        <label data-i18n="s7_diagramNotes"></label>
+        <textarea name="diagramNotes"></textarea>
+      </div>
     </div>
+
+    <!-- STEP 8 -->
+    <div class="step" data-step="8">
+      <p class="step-eyebrow" data-i18n="s8_eyebrow"></p>
+      <h2 data-i18n="s8_h2"></h2>
+
+      <div class="field"><label data-i18n="s8_totalConsideration"></label><input type="text" name="totalConsideration" placeholder="$"></div>
+      <fieldset>
+        <legend data-i18n="s8_payMethod"></legend>
+        <div class="check-row">
+          <label><input type="checkbox" name="payCash"> <span data-i18n="pay_cash"></span></label>
+          <label><input type="checkbox" name="payCheck"> <span data-i18n="pay_check"></span></label>
+          <label><input type="checkbox" name="payNote"> <span data-i18n="pay_note"></span></label>
+          <label><input type="checkbox" name="payProperty"> <span data-i18n="pay_property"></span></label>
+        </div>
+      </fieldset>
+      <div class="field"><label data-i18n="s8_escrowInfo"></label><input type="text" name="escrowInfo"></div>
+      <div class="row2">
+        <div class="field"><label data-i18n="s8_accountantName"></label><input type="text" name="accountantName"></div>
+        <div class="field"><label data-i18n="s8_accountantPhone"></label><input type="tel" name="accountantPhone"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label data-i18n="s8_attorneyName"></label><input type="text" name="attorneyName"></div>
+        <div class="field"><label data-i18n="s8_attorneyPhone"></label><input type="tel" name="attorneyPhone"></div>
+      </div>
+      <div class="field"><label data-i18n="s8_contactName"></label><input type="text" name="contactName"></div>
+      <div class="row2">
+        <div class="field"><label data-i18n="s8_contactPhone"></label><input type="tel" name="contactPhone"></div>
+        <div class="field"><label data-i18n="s8_contactEmail"></label><input type="email" name="contactEmail"></div>
+      </div>
+    </div>
+
+    <!-- STEP 9 -->
+    <div class="step" data-step="9">
+      <p class="step-eyebrow" data-i18n="s9_eyebrow"></p>
+      <h2 data-i18n="s9_h2"></h2>
+      <p class="step-help" data-i18n="s9_help"></p>
+
+      <div class="checklist-item"><input type="checkbox" name="doc1"><span data-i18n="doc1"></span></div>
+      <div class="checklist-item"><input type="checkbox" name="doc2"><span data-i18n="doc2"></span></div>
+      <div class="checklist-item"><input type="checkbox" name="doc3"><span data-i18n="doc3"></span></div>
+      <div class="checklist-item"><input type="checkbox" name="doc4"><span data-i18n="doc4"></span></div>
+      <div class="checklist-item"><input type="checkbox" name="doc5"><span data-i18n="doc5"></span></div>
+      <div class="checklist-item"><input type="checkbox" name="doc6"><span data-i18n="doc6"></span></div>
+      <div class="checklist-item"><input type="checkbox" name="doc7"><span data-i18n="doc7"></span></div>
+
+      <div class="field" style="margin-top:20px;">
+        <label data-i18n="s9_comments"></label>
+        <textarea name="comments"></textarea>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <button type="button" class="btn btn-secondary" id="prevBtn" data-i18n="btn_back"></button>
+      <button type="button" class="btn btn-print" id="printBtn" data-i18n="btn_print"></button>
+      <button type="button" class="btn btn-primary" id="nextBtn"></button>
+    </div>
+  </form>
+
+  <div class="success-screen" id="successScreen">
+    <div class="check">✓</div>
+    <h2 data-i18n="success_h2"></h2>
+    <p><span data-i18n="success_p1"></span> <b id="successFileNumber"></b>.<br><span data-i18n="success_p2"></span></p>
+    <button type="button" class="btn btn-print" id="printBtnSuccess" data-i18n="btn_print" style="margin-top:16px;"></button>
   </div>
 
-  <div class="field">
-    <label id="l-date-sign">Fecha de firma</label>
-    <input type="text" id="sign-date" readonly="" style="background:#f3f4f6;cursor:not-allowed">
-  </div>
+  <div id="printView"></div>
 
-  <div class="field">
-    <label class="check-opt" style="align-items:flex-start;gap:10px">
-      <input type="checkbox" id="confirmo" style="margin-top:2px;accent-color:#8B1A1A;width:18px;height:18px">
-      <span id="l-confirmo">Confirmo que toda la información es correcta y autorizo la preparación de mi declaración.</span>
-    </label>
-    <div class="err" id="err-confirmo">Debe marcar esta casilla para continuar.</div>
-  </div>
-
-  <div class="nav">
-    <button class="btn-back" onclick="back(8)"><span id="btn-back8">← Atrás</span></button>
-    <button class="btn-submit" onclick="submitForm()"><span id="btn-submit">✓ Enviar Cuestionario</span></button>
-  </div>
-</div>
-
-<!-- SUCCESS -->
-<div id="success">
-  <div class="success-icon">✅</div>
-  <h2 style="color:#8B1A1A;font-size:20px" id="succ-title">¡Cuestionario Enviado!</h2>
-  <p style="color:#6B7280;margin:8px 0" id="succ-sub">Nos pondremos en contacto pronto.</p>
-  <div class="success-num" id="file-num">AVT-Q-2024-XXXX</div>
-  <p style="font-size:12px;color:#6B7280;margin-top:6px" id="succ-info">Guarde este número de archivo para referencia.</p>
-  <div class="print-btns">
-    <button class="btn-print" onclick="printForm()" id="btn-print2">🖨️ Imprimir</button>
-    <button class="btn-pdf" onclick="pdfForm()" id="btn-pdf2">⬇️ Guardar PDF</button>
-  </div>
-</div>
-
-<!-- FLOAT BAR -->
-<div id="float-bar" style="display: none;">
-  <button class="fb-print" onclick="printForm()" title="Imprimir">🖨️</button>
-  <button class="fb-pdf" onclick="pdfForm()" title="Guardar PDF">⬇️</button>
+  <footer>
+    Avanty Services · T.M. Financial Services LLC · 14435 Sherman Way Ste 204, Van Nuys, CA<br>
+    info@avantyservices.com
+  </footer>
 </div>
 
 <script>
-// ===================== LANGUAGE =====================
 const T = {
   es: {
-    'h-title':'Cuestionario del Cliente','h-sub':'T.M. Financial Services LLC',
-    's1-title':'1. Información Personal','s1-sub':'Complete todos los campos requeridos *',
-    's2-title':'2. Historial Fiscal','s2-sub':'Información sobre años anteriores',
-    's3-title':'3. Cónyuge y Dependientes','s3-sub':'Si aplica',
-    's4-title':'4. Ingresos','s4-sub':'Seleccione todas las fuentes que apliquen',
-    's5-title':'5. Deducciones y Créditos','s5-sub':'Seleccione todo lo que aplique',
-    's6-title':'6. Estatus Migratorio','s6-sub':'Esta información es confidencial',
-    's7-title':'7. Documentos y Depósito Directo','s7-sub':'Marque los documentos que trae / enviará',
-    's8-title':'8. Firma y Confirmación','s8-sub':'Lea y firme para completar',
-    'l-fname':'Nombre *','l-lname':'Apellido(s) *','l-ssn':'SSN / ITIN *','l-dob':'Fecha de Nacimiento *',
-    'l-phone':'Teléfono *','l-email':'Correo Electrónico','l-address':'Dirección *',
-    'l-city':'Ciudad *','l-state':'Estado *','l-zip':'ZIP *',
-    'l-filing':'Estado Civil / Filing Status *',
-    'o-single':'Soltero(a)','o-mfj':'Casado(a) Conjunto','o-mfs':'Casado(a) Separado',
-    'o-hh':'Jefe de Familia','o-qw':'Viudo(a) Calificado',
-    'l-taxyear':'Año fiscal a preparar *','l-filed-before':'¿Ha presentado impuestos antes?',
-    'o-yes':'Sí','o-no':'No',
-    'l-prev-preparer':'¿Quién preparó sus impuestos el año pasado?',
-    'l-owe':'¿Tuvo balance a deber o a favor el año pasado?',
-    'o-owe':'A deber','o-refund':'A favor / Reembolso','o-zero':'$0','o-dontknow':'No sé',
-    'l-irs-letters':'¿Recibió cartas del IRS o FTB este año?',
-    'l-irs-detail':'Si recibió cartas, explique brevemente:',
-    'ss-spouse':'Información del Cónyuge',
-    'l-spname':'Nombre completo','l-spssn':'SSN / ITIN del cónyuge',
-    'l-spdob':'Fecha de nacimiento','l-spemail':'Email del cónyuge',
-    'ss-deps':'Dependientes','btn-add-dep':'+ Agregar Dependiente',
-    'l-income-types':'Tipos de ingresos recibidos en el año:',
-    'o-w2':'W-2 (empleado)','o-1099nec':'1099-NEC (contratista independiente)',
-    'o-1099misc':'1099-MISC','o-1099g':'1099-G (desempleo / reembolso estatal)',
-    'o-1099r':'1099-R (pensión / retiro)','o-ssa':'SSA-1099 (Seguro Social)',
-    'o-rent':'Ingresos por renta','o-biz':'Negocio propio (Schedule C)',
-    'o-invest':'Inversiones / dividendos (1099-DIV / 1099-INT)',
-    'o-crypto':'Criptomonedas','o-other-inc':'Otros ingresos',
-    'l-other-inc':'Especifique otros ingresos:','l-employers':'Nombre(s) de empleadores / pagadores principales:',
-    'l-ded':'Deducciones / situaciones especiales:',
-    'o-mortgage':'Intereses de hipoteca (Form 1098)','o-charity':'Donaciones de caridad',
-    'o-student':'Préstamo estudiantil (Form 1098-E)','o-hsa':'HSA / MSA (Form 1099-SA)',
-    'o-ira':'Aportación a IRA / 401k','o-edu':'Gastos de educación (Form 1098-T)',
-    'o-biz-exp':'Gastos de negocio propio','o-home-off':'Oficina en casa',
-    'o-vehicle':'Uso del vehículo para trabajo','o-childcare':'Gastos de cuidado de hijos (Form 2441)',
-    'o-energy':'Mejoras de energía en hogar','o-alimony':'Pensión alimenticia pagada',
-    'l-notes-ded':'Notas adicionales sobre deducciones:',
-    'l-citizen':'Estatus migratorio *',
-    'o-citizen':'Ciudadano(a) americano(a)','o-pr':'Residente Permanente (Green Card)',
-    'o-visa':'Visa de trabajo (H1B, L1, O1, etc.)','o-itin':'ITIN / Sin estatus legal',
-    'o-other-cit':'Otro',
-    'l-foreign-income':'¿Tuvo ingresos fuera de EE.UU. este año?',
-    'l-foreign-accounts':'¿Tiene cuentas bancarias fuera de EE.UU.?',
-    'l-docs':'Documentos disponibles:',
-    'o-doc-id':'Identificación con foto','o-doc-itin':'Carta ITIN',
-    'o-doc-ss':'Tarjeta de Seguro Social','o-doc-prev':'Declaración del año anterior',
-    'o-doc-biz':'Registros de negocio / gastos','o-doc-other':'Otros documentos',
-    'ss-dd':'Depósito Directo del Reembolso',
-    'l-bank':'Banco','l-routing':'Número de Ruta (Routing #)','l-account':'Número de Cuenta',
-    'l-acct-type':'Tipo de cuenta','o-checking':'Checking','o-savings':'Savings',
-    'l-sig':'Firma digital *','btn-clear-sig':'Borrar firma',
-    'l-date-sign':'Fecha de firma',
-    'l-confirmo':'Confirmo que toda la información es correcta y autorizo la preparación de mi declaración.',
-    'btn-submit':'✓ Enviar Cuestionario',
-    'auth-text':'Certifico que la información proporcionada en este cuestionario es verdadera, correcta y completa. Autorizo a T.M. Financial Services LLC / Avanty Services a preparar mi declaración de impuestos con base en la información aquí suministrada. Entiendo que soy responsable de la exactitud de los datos proporcionados.',
-    'succ-title':'¡Cuestionario Enviado!','succ-sub':'Nos pondremos en contacto pronto.',
-    'succ-info':'Guarde este número de archivo para referencia.',
-    'btn-print2':'🖨️ Imprimir','btn-pdf2':'⬇️ Guardar PDF',
-    'btn-next1':'Siguiente →','btn-next2':'Siguiente →','btn-next3':'Siguiente →',
-    'btn-next4':'Siguiente →','btn-next5':'Siguiente →','btn-next6':'Siguiente →',
-    'btn-next7':'Siguiente →',
-    'btn-back2':'← Atrás','btn-back3':'← Atrás','btn-back4':'← Atrás',
-    'btn-back5':'← Atrás','btn-back6':'← Atrás','btn-back7':'← Atrás','btn-back8':'← Atrás',
-    'prog-prefix':'Sección'
+    hdr_title: "Cuestionario — Transferencia de Licencia de Alcohol (ABC)",
+    hdr_sub: "Complete esta información para iniciar el trámite ante el Department of Alcoholic Beverage Control",
+    fileNumLabel: "No. de expediente:",
+    s1_eyebrow:"Paso 1 de 9", s1_h2:"Datos generales del negocio",
+    s1_help:"Información básica del negocio y del trámite que se va a realizar.",
+    s1_dba:"Nombre comercial del negocio (DBA)",
+    s1_legalName:"Nombre legal de la entidad",
+    s1_entityType:"Tipo de entidad",
+    s1_premisesAddress:"Dirección del local (premises)",
+    s1_city:"Ciudad", s1_state:"Estado", s1_zip:"Código postal",
+    s1_phone:"Teléfono del local", s1_email:"Correo electrónico",
+    s1_licenseType:"Tipo de licencia ABC solicitada",
+    s1_transactionType:"Tipo de transacción",
+    s1_tempPermit:"¿Se solicita permiso temporal? (solo transferencias persona a persona)",
+    ent_sole:"Dueño único (Sole Proprietor)", ent_genPartner:"Sociedad general", ent_limPartner:"Sociedad en comandita",
+    ent_llc:"Compañía de Responsabilidad Limitada (LLC)", ent_corp:"Corporación", ent_marriedCouple:"Pareja casada",
+    lic41:"41 — On-Sale Beer & Wine (restaurante)", lic42:"42 — On-Sale Beer & Wine (bar público)",
+    lic47:"47 — On-Sale General (restaurante)", lic48:"48 — On-Sale General (bar público)",
+    tt_original:"Original (nueva)", tt_p2p:"Persona a persona", tt_prem2prem:"Local a local", tt_exchange:"Intercambio",
+    opt_select:"Seleccione…", opt_other:"Otro", yes:"Sí", no:"No",
+
+    s2_eyebrow:"Paso 2 de 9", s2_h2:"Vendedor / transferente actual",
+    s2_help:"Solo si es una transferencia de una licencia ya existente. Si es licencia original nueva, puede pasar al siguiente paso.",
+    s2_sellerName:"Nombre del licenciatario actual (vendedor)",
+    s2_sellerLicenseNumber:"Número de licencia ABC actual",
+    s2_sellerAddress:"Dirección del local bajo la licencia actual (si es diferente a la del Paso 1)",
+    s2_sellerPhone:"Teléfono del vendedor",
+    s2_sellerOperating:"¿El local está operando actualmente?",
+    s2_sellerClosedDate:"Si no está operando, ¿fecha de cierre?",
+
+    s3_eyebrow:"Paso 3 de 9", s3_h2:"Solicitante(s) / compradores",
+    s3_help:"Agregue una tarjeta por cada persona con 10% o más de interés en el negocio (dueños, socios, oficiales, directores). Esta información se usa para el Affidávit Personal (ABC-208-A).",
+    s3_addPerson:"+ Agregar otra persona",
+
+    s4_eyebrow:"Paso 4 de 9", s4_h2:"Preguntas de cumplimiento (Tied-House)",
+    s4_help:"Estas preguntas aplican a cada solicitante y son requeridas por el ABC. Responda para el negocio en general; si la respuesta varía por persona, explique en el campo de detalles.",
+    s4_leg1:"Interés en otros negocios de alcohol",
+    s4_q1:"¿Algún solicitante tiene interés (directo o indirecto) en otro negocio de alcohol en California?",
+    s4_q2:"¿Y fuera de California?",
+    s4_q3:"¿Algún solicitante trabaja actualmente en otro negocio de alcohol (CA o fuera)?",
+    s4_details:'Si respondió "Sí" a cualquiera de las anteriores, explique',
+    s4_leg2:"Historial con el ABC",
+    s4_q4:"¿Algún solicitante ha tenido una licencia de alcohol denegada, suspendida o revocada anteriormente?",
+    s4_details2:'Si "Sí", explique',
+
+    s5_eyebrow:"Paso 5 de 9", s5_h2:"Información financiera de cada solicitante",
+    s5_help:"Necesaria para el Affidávit Financiero (ABC-208-B). Si hay más de un solicitante, puede combinar la información o adjuntarla por separado.",
+    s5_totalContribution:"Contribución total al negocio", s5_cashContribution:"Contribución en efectivo",
+    s5_legA:"A. Ahorros / cuentas bancarias", s5_bankName:"Nombre del banco", s5_bankAmount:"Monto invertido",
+    s5_legB:"B. Préstamos", s5_loanLender:"Prestamista", s5_loanAmount:"Monto del préstamo", s5_loanTerms:"Términos (plazo, garantía)",
+    s5_legC:"C. Venta de propiedad", s5_propertySold:"Descripción de la propiedad vendida", s5_propertyAmount:"Producto neto de la venta",
+    s5_legD:"D. Otra fuente de fondos", s5_otherSource:"Describa (herencia, liquidación, regalo, etc.)",
+
+    s6_eyebrow:"Paso 6 de 9", s6_h2:"Información corporativa",
+    s6_help:"Complete esta sección solo si la entidad es una Corporación o LLC. Si es dueño único o sociedad, pase al siguiente paso.",
+    s6_incorpDate:"Fecha de incorporación / formación", s6_incorpState:"Estado de incorporación",
+    s6_sosFileNumber:"Número de archivo del Secretario de Estado",
+    s6_corpBankName:"Nombre del banco corporativo", s6_corpBankAccount:"Número de cuenta",
+    s6_officers:"Oficiales y directores",
+    s6_addOfficer:"+ Agregar oficial/director",
+    officer_president:"Presidente", officer_vp:"Vicepresidente", officer_secretary:"Secretario(a)",
+    officer_treasurer:"Tesorero(a)", officer_director:"Director(a)", officer_ceo:"CEO / Director General",
+    officer_cfo:"CFO / Director Financiero", officer_llcMember:"Miembro LLC",
+    officer_namePlaceholder:"Nombre completo",
+    s6_llcMemberRun:"Si es LLC: ¿es administrada por los miembros (member-run)?",
+
+    s7_eyebrow:"Paso 7 de 9", s7_h2:"Información del local (premises)",
+    s7_ownership:"¿El local es rentado o propio?", rented:"Rentado", owned:"Propio",
+    s7_landlordName:"Nombre del arrendador", s7_landlordPhone:"Teléfono del arrendador",
+    s7_monthlyRent:"Renta mensual", s7_leaseExpiration:"Fecha de vencimiento del contrato",
+    s7_crossStreet:"Cruce de calles más cercano al local",
+    s7_diagramNotes:"Notas sobre el diagrama del local (entradas, salidas, áreas — el diagrama final se dibuja por separado)",
+
+    s8_eyebrow:"Paso 8 de 9", s8_h2:"Consideración de la transacción y contactos",
+    s8_totalConsideration:"Monto total a pagar por el negocio y la licencia",
+    s8_payMethod:"Forma de pago",
+    pay_cash:"Efectivo", pay_check:"Cheque(s)", pay_note:"Nota(s) de pago", pay_property:"Propiedad tangible/intangible",
+    s8_escrowInfo:"Compañía de escrow (nombre, dirección, teléfono)",
+    s8_accountantName:"Contador / Bookkeeper", s8_accountantPhone:"Teléfono del contador",
+    s8_attorneyName:"Abogado (si aplica)", s8_attorneyPhone:"Teléfono del abogado",
+    s8_contactName:"Persona de contacto para este trámite",
+    s8_contactPhone:"Teléfono de contacto", s8_contactEmail:"Correo de contacto",
+
+    s9_eyebrow:"Paso 9 de 9", s9_h2:"Documentos a preparar",
+    s9_help:"Marque lo que ya tiene disponible. Avanty Services le indicará cómo enviar cada documento una vez recibido este cuestionario.",
+    doc1:"Identificación oficial de cada solicitante (licencia de manejo o ID)",
+    doc2:"Comprobante de domicilio de cada solicitante",
+    doc3:"Contrato de arrendamiento o escritura del local",
+    doc4:"Artículos de incorporación / organización (si es corporación o LLC)",
+    doc5:"Acuerdo de compra-venta del negocio",
+    doc6:"Instrucciones de escrow (si aplica)",
+    doc7:"Últimos 4 dígitos de seguro social de cada solicitante (a mano, no por escrito aquí)",
+    s9_comments:"Comentarios adicionales",
+
+    btn_back:"Atrás", btn_continue:"Continuar", btn_submit:"Enviar cuestionario",
+    btn_print:"🖨 Imprimir / Guardar PDF",
+    success_h2:"¡Cuestionario recibido!",
+    success_p1:"Gracias por completar el cuestionario. Su expediente es",
+    success_p2:"Avanty Services se pondrá en contacto con usted para continuar con la solicitud de transferencia de licencia ante el ABC.",
+
+    p_name:"Nombre completo", p_prevNames:"Nombres previos / alias (si aplica)", p_homeAddress:"Dirección de casa",
+    p_phone:"Teléfono", p_email:"Correo", p_dob:"Fecha de nacimiento", p_pob:"Lugar de nacimiento",
+    p_dl:"Licencia de manejo o ID", p_dlState:"Estado donde se emitió", p_marital:"Estado civil",
+    p_spouse:"Nombre del cónyuge / pareja registrada (si aplica)", p_role:"Cargo/rol en el negocio",
+    p_percent:"% de propiedad en el negocio", p_employment:"Historial de empleo — últimos 5 años (fechas, puesto, empresa)",
+    p_remove:"Eliminar", p_title:"Solicitante",
+    marital_single:"Soltero(a)", marital_married:"Casado(a)", marital_divorced:"Divorciado(a)",
+    marital_widowed:"Viudo(a)", marital_separated:"Separado(a)", marital_partner:"Pareja registrada",
+    role_sole:"Dueño único", role_spouse:"Cónyuge/pareja registrada", role_genPartner:"Socio general",
+    role_limPartner:"Socio limitado", role_manager:"Gerente", role_director:"Director",
+    role_shareholder:"Accionista", role_officer:"Oficial", role_llcMember:"Miembro LLC",
+    stepNames:["Datos generales","Vendedor / transferente","Solicitantes","Cumplimiento (Tied-House)","Información financiera","Información corporativa","El local","Consideración y contactos","Documentos"],
+    stepLabelPrefix:"Sección", stepLabelJoin:"de"
   },
   en: {
-    'h-title':'Client Questionnaire','h-sub':'T.M. Financial Services LLC',
-    's1-title':'1. Personal Information','s1-sub':'Please complete all required fields *',
-    's2-title':'2. Tax History','s2-sub':'Information about previous years',
-    's3-title':'3. Spouse & Dependents','s3-sub':'If applicable',
-    's4-title':'4. Income','s4-sub':'Select all sources that apply',
-    's5-title':'5. Deductions & Credits','s5-sub':'Select all that apply',
-    's6-title':'6. Immigration Status','s6-sub':'This information is confidential',
-    's7-title':'7. Documents & Direct Deposit','s7-sub':'Check documents you will bring / send',
-    's8-title':'8. Signature & Confirmation','s8-sub':'Please read and sign to complete',
-    'l-fname':'First Name *','l-lname':'Last Name *','l-ssn':'SSN / ITIN *','l-dob':'Date of Birth *',
-    'l-phone':'Phone *','l-email':'Email Address','l-address':'Address *',
-    'l-city':'City *','l-state':'State *','l-zip':'ZIP *',
-    'l-filing':'Filing Status *',
-    'o-single':'Single','o-mfj':'Married Filing Jointly','o-mfs':'Married Filing Separately',
-    'o-hh':'Head of Household','o-qw':'Qualifying Widow(er)',
-    'l-taxyear':'Tax year to prepare *','l-filed-before':'Have you filed taxes before?',
-    'o-yes':'Yes','o-no':'No',
-    'l-prev-preparer':'Who prepared your taxes last year?',
-    'l-owe':'Did you owe or receive a refund last year?',
-    'o-owe':'Owed','o-refund':'Refund','o-zero':'$0','o-dontknow':"Don't know",
-    'l-irs-letters':'Did you receive any IRS or FTB letters this year?',
-    'l-irs-detail':'If you received letters, please explain:',
-    'ss-spouse':"Spouse's Information",
-    'l-spname':'Full name','l-spssn':"Spouse's SSN / ITIN",
-    'l-spdob':'Date of birth','l-spemail':"Spouse's email",
-    'ss-deps':'Dependents','btn-add-dep':'+ Add Dependent',
-    'l-income-types':'Types of income received during the year:',
-    'o-w2':'W-2 (employee)','o-1099nec':'1099-NEC (independent contractor)',
-    'o-1099misc':'1099-MISC','o-1099g':'1099-G (unemployment / state refund)',
-    'o-1099r':'1099-R (pension / retirement)','o-ssa':'SSA-1099 (Social Security)',
-    'o-rent':'Rental income','o-biz':'Self-employed (Schedule C)',
-    'o-invest':'Investments / dividends (1099-DIV / 1099-INT)',
-    'o-crypto':'Cryptocurrency','o-other-inc':'Other income',
-    'l-other-inc':'Specify other income:','l-employers':'Employer(s) / payer name(s):',
-    'l-ded':'Deductions / special situations:',
-    'o-mortgage':'Mortgage interest (Form 1098)','o-charity':'Charitable donations',
-    'o-student':'Student loan interest (Form 1098-E)','o-hsa':'HSA / MSA (Form 1099-SA)',
-    'o-ira':'IRA / 401k contribution','o-edu':'Education expenses (Form 1098-T)',
-    'o-biz-exp':'Business expenses','o-home-off':'Home office',
-    'o-vehicle':'Vehicle use for work','o-childcare':'Child care expenses (Form 2441)',
-    'o-energy':'Home energy improvements','o-alimony':'Alimony paid',
-    'l-notes-ded':'Additional notes on deductions:',
-    'l-citizen':'Immigration status *',
-    'o-citizen':'U.S. Citizen','o-pr':'Permanent Resident (Green Card)',
-    'o-visa':'Work visa (H1B, L1, O1, etc.)','o-itin':'ITIN / Undocumented',
-    'o-other-cit':'Other',
-    'l-foreign-income':'Did you have income outside the U.S. this year?',
-    'l-foreign-accounts':'Do you have bank accounts outside the U.S.?',
-    'l-docs':'Available documents:',
-    'o-doc-id':'Photo ID','o-doc-itin':'ITIN letter',
-    'o-doc-ss':'Social Security card','o-doc-prev':'Prior year tax return',
-    'o-doc-biz':'Business records / expenses','o-doc-other':'Other documents',
-    'ss-dd':'Refund Direct Deposit',
-    'l-bank':'Bank name','l-routing':'Routing number','l-account':'Account number',
-    'l-acct-type':'Account type','o-checking':'Checking','o-savings':'Savings',
-    'l-sig':'Digital signature *','btn-clear-sig':'Clear signature',
-    'l-date-sign':'Signature date',
-    'l-confirmo':'I confirm that all information is correct and I authorize preparation of my tax return.',
-    'btn-submit':'✓ Submit Questionnaire',
-    'auth-text':'I certify that the information provided in this questionnaire is true, correct, and complete. I authorize T.M. Financial Services LLC / Avanty Services to prepare my tax return based on the information provided here. I understand that I am responsible for the accuracy of the data provided.',
-    'succ-title':'Questionnaire Submitted!','succ-sub':'We will be in touch soon.',
-    'succ-info':'Keep this file number for your records.',
-    'btn-print2':'🖨️ Print','btn-pdf2':'⬇️ Save PDF',
-    'btn-next1':'Next →','btn-next2':'Next →','btn-next3':'Next →',
-    'btn-next4':'Next →','btn-next5':'Next →','btn-next6':'Next →',
-    'btn-next7':'Next →',
-    'btn-back2':'← Back','btn-back3':'← Back','btn-back4':'← Back',
-    'btn-back5':'← Back','btn-back6':'← Back','btn-back7':'← Back','btn-back8':'← Back',
-    'prog-prefix':'Section'
+    hdr_title: "Questionnaire — Alcohol License Transfer (ABC)",
+    hdr_sub: "Complete this information to begin the process with the Department of Alcoholic Beverage Control",
+    fileNumLabel: "File no.:",
+    s1_eyebrow:"Step 1 of 9", s1_h2:"General business information",
+    s1_help:"Basic information about the business and the transaction being requested.",
+    s1_dba:"Business trade name (DBA)",
+    s1_legalName:"Legal entity name",
+    s1_entityType:"Entity type",
+    s1_premisesAddress:"Premises address",
+    s1_city:"City", s1_state:"State", s1_zip:"Zip code",
+    s1_phone:"Premises phone", s1_email:"Email address",
+    s1_licenseType:"ABC license type requested",
+    s1_transactionType:"Transaction type",
+    s1_tempPermit:"Is a temporary permit requested? (person-to-person transfers only)",
+    ent_sole:"Sole Proprietor", ent_genPartner:"General Partnership", ent_limPartner:"Limited Partnership",
+    ent_llc:"Limited Liability Company (LLC)", ent_corp:"Corporation", ent_marriedCouple:"Married Couple",
+    lic41:"41 — On-Sale Beer & Wine (eating place)", lic42:"42 — On-Sale Beer & Wine (public premises)",
+    lic47:"47 — On-Sale General (eating place)", lic48:"48 — On-Sale General (public premises)",
+    tt_original:"Original (new)", tt_p2p:"Person to person", tt_prem2prem:"Premises to premises", tt_exchange:"Exchange",
+    opt_select:"Select…", opt_other:"Other", yes:"Yes", no:"No",
+
+    s2_eyebrow:"Step 2 of 9", s2_h2:"Current seller / transferor",
+    s2_help:"Only if this is a transfer of an existing license. If this is a new original license, you may skip to the next step.",
+    s2_sellerName:"Current licensee's name (seller)",
+    s2_sellerLicenseNumber:"Current ABC license number",
+    s2_sellerAddress:"Premises address under the current license (if different from Step 1)",
+    s2_sellerPhone:"Seller's phone",
+    s2_sellerOperating:"Is the premises currently operating?",
+    s2_sellerClosedDate:"If not operating, closing date?",
+
+    s3_eyebrow:"Step 3 of 9", s3_h2:"Applicant(s) / buyer(s)",
+    s3_help:"Add a card for each person with 10% or more interest in the business (owners, partners, officers, directors). This information is used for the Individual Personal Affidavit (ABC-208-A).",
+    s3_addPerson:"+ Add another person",
+
+    s4_eyebrow:"Step 4 of 9", s4_h2:"Compliance questions (Tied-House)",
+    s4_help:"These questions apply to each applicant and are required by ABC. Answer for the business overall; if the answer varies by person, explain in the details field.",
+    s4_leg1:"Interest in other alcohol businesses",
+    s4_q1:"Does any applicant hold any ownership or interest (direct or indirect) in another alcohol business in California?",
+    s4_q2:"And outside of California?",
+    s4_q3:"Is any applicant currently employed in another alcohol business (in or outside CA)?",
+    s4_details:'If you answered "Yes" to any of the above, please explain',
+    s4_leg2:"History with ABC",
+    s4_q4:"Has any applicant ever had an alcoholic beverage license denied, suspended, or revoked?",
+    s4_details2:'If "Yes", please explain',
+
+    s5_eyebrow:"Step 5 of 9", s5_h2:"Financial information for each applicant",
+    s5_help:"Needed for the Individual Financial Affidavit (ABC-208-B). If there is more than one applicant, you may combine the information or attach it separately.",
+    s5_totalContribution:"Total contribution to the business", s5_cashContribution:"Cash contribution",
+    s5_legA:"A. Savings / bank accounts", s5_bankName:"Bank name", s5_bankAmount:"Amount invested",
+    s5_legB:"B. Loans", s5_loanLender:"Lender", s5_loanAmount:"Loan amount", s5_loanTerms:"Terms (term, security)",
+    s5_legC:"C. Sale of property", s5_propertySold:"Description of property sold", s5_propertyAmount:"Net proceeds",
+    s5_legD:"D. Other source of funds", s5_otherSource:"Describe (inheritance, settlement, gift, etc.)",
+
+    s6_eyebrow:"Step 6 of 9", s6_h2:"Corporate information",
+    s6_help:"Complete this section only if the entity is a Corporation or LLC. If sole proprietor or partnership, skip to the next step.",
+    s6_incorpDate:"Incorporation / formation date", s6_incorpState:"State of incorporation",
+    s6_sosFileNumber:"Secretary of State file number",
+    s6_corpBankName:"Corporate bank name", s6_corpBankAccount:"Account number",
+    s6_officers:"Officers and directors",
+    s6_addOfficer:"+ Add officer/director",
+    officer_president:"President", officer_vp:"Vice President", officer_secretary:"Secretary",
+    officer_treasurer:"Treasurer", officer_director:"Director", officer_ceo:"CEO",
+    officer_cfo:"CFO", officer_llcMember:"LLC Member",
+    officer_namePlaceholder:"Full name",
+    s6_llcMemberRun:"If LLC: is it member-run?",
+
+    s7_eyebrow:"Step 7 of 9", s7_h2:"Premises information",
+    s7_ownership:"Is the premises leased or owned?", rented:"Leased", owned:"Owned",
+    s7_landlordName:"Landlord's name", s7_landlordPhone:"Landlord's phone",
+    s7_monthlyRent:"Monthly rent", s7_leaseExpiration:"Lease expiration date",
+    s7_crossStreet:"Nearest cross street to the premises",
+    s7_diagramNotes:"Notes about the premises diagram (entrances, exits, areas — final diagram drawn separately)",
+
+    s8_eyebrow:"Step 8 of 9", s8_h2:"Transaction consideration and contacts",
+    s8_totalConsideration:"Total amount to be paid for the business and license",
+    s8_payMethod:"Method of payment",
+    pay_cash:"Cash", pay_check:"Check(s)", pay_note:"Promissory note(s)", pay_property:"Tangible/intangible property",
+    s8_escrowInfo:"Escrow company (name, address, phone)",
+    s8_accountantName:"Accountant / Bookkeeper", s8_accountantPhone:"Accountant's phone",
+    s8_attorneyName:"Attorney (if applicable)", s8_attorneyPhone:"Attorney's phone",
+    s8_contactName:"Contact person for this transaction",
+    s8_contactPhone:"Contact phone", s8_contactEmail:"Contact email",
+
+    s9_eyebrow:"Step 9 of 9", s9_h2:"Documents to prepare",
+    s9_help:"Check what you already have available. Avanty Services will let you know how to submit each document once this questionnaire is received.",
+    doc1:"Official ID for each applicant (driver's license or ID)",
+    doc2:"Proof of address for each applicant",
+    doc3:"Lease agreement or deed for the premises",
+    doc4:"Articles of incorporation / organization (if corporation or LLC)",
+    doc5:"Business purchase agreement",
+    doc6:"Escrow instructions (if applicable)",
+    doc7:"Last 4 digits of SSN for each applicant (by hand, not written here)",
+    s9_comments:"Additional comments",
+
+    btn_back:"Back", btn_continue:"Continue", btn_submit:"Submit questionnaire",
+    btn_print:"🖨 Print / Save PDF",
+    success_h2:"Questionnaire received!",
+    success_p1:"Thank you for completing the questionnaire. Your file number is",
+    success_p2:"Avanty Services will contact you to continue the ABC license transfer application.",
+
+    p_name:"Full name", p_prevNames:"Previous names / aliases (if any)", p_homeAddress:"Home address",
+    p_phone:"Phone", p_email:"Email", p_dob:"Date of birth", p_pob:"Place of birth",
+    p_dl:"Driver's license or ID", p_dlState:"State issued", p_marital:"Marital status",
+    p_spouse:"Spouse / registered partner's name (if any)", p_role:"Role in the business",
+    p_percent:"% ownership in the business", p_employment:"Employment history — last 5 years (dates, title, company)",
+    p_remove:"Remove", p_title:"Applicant",
+    marital_single:"Single", marital_married:"Married", marital_divorced:"Divorced",
+    marital_widowed:"Widow(er)", marital_separated:"Separated", marital_partner:"Registered partner",
+    role_sole:"Sole owner", role_spouse:"Spouse/registered partner", role_genPartner:"General partner",
+    role_limPartner:"Limited partner", role_manager:"Manager", role_director:"Director",
+    role_shareholder:"Stockholder", role_officer:"Officer", role_llcMember:"LLC member",
+    stepNames:["General information","Seller / transferor","Applicants","Compliance (Tied-House)","Financial information","Corporate information","The premises","Consideration & contacts","Documents"],
+    stepLabelPrefix:"Section", stepLabelJoin:"of"
   }
 };
+
 let currentLang = 'es';
 
-function setLang(lang) {
-  currentLang = lang;
-  document.getElementById('btn-es').className = lang==='es' ? 'active' : '';
-  document.getElementById('btn-en').className = lang==='en' ? 'active' : '';
-  const d = T[lang];
-  for (const [id, text] of Object.entries(d)) {
-    if (id === 'prog-prefix') continue;
-    const el = document.getElementById(id);
-    if (el) el.textContent = text;
-  }
-  updateProgress(currentStep);
-}
-
-// ===================== STEPS =====================
-let currentStep = 1;
-const TOTAL = 8;
-
-function updateProgress(step) {
-  document.getElementById('prog-fill').style.width = (step/TOTAL*100)+'%';
-  const prefix = T[currentLang]['prog-prefix'];
-  document.getElementById('prog-text').textContent = prefix+' '+step+' / '+TOTAL;
-  document.querySelectorAll('.dot').forEach((d,i) => {
-    d.className = 'dot';
-    if (i+1 < step) d.classList.add('done');
-    else if (i+1 === step) d.classList.add('current');
+function applyStatic(){
+  const dict = T[currentLang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[key] !== undefined) el.textContent = dict[key];
   });
-  document.getElementById('float-bar').style.display = step > 1 ? 'flex' : 'none';
+  nextBtn.textContent = current===steps.length-1 ? dict.btn_submit : dict.btn_continue;
+  renderStepLabel();
+  document.querySelectorAll('.person-card').forEach(card=>applyPersonLabels(card));
+  document.querySelectorAll('.officer-row').forEach(row=>applyOfficerLabels(row));
 }
 
-function goTo(step) {
-  document.getElementById('step-'+currentStep).classList.remove('active');
-  currentStep = step;
-  document.getElementById('step-'+step).classList.add('active');
-  updateProgress(step);
+function setLang(lang){
+  currentLang = lang;
+  document.getElementById('btnEs').classList.toggle('active', lang==='es');
+  document.getElementById('btnEn').classList.toggle('active', lang==='en');
+  document.documentElement.lang = lang;
+  applyStatic();
+}
+
+const steps = Array.from(document.querySelectorAll('.step'));
+let current = 0;
+const progressFill = document.getElementById('progressFill');
+const stepLabel = document.getElementById('stepLabel');
+const stepNameEl = document.getElementById('stepName');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const form = document.getElementById('cuestionario');
+const successScreen = document.getElementById('successScreen');
+
+function renderStepLabel(){
+  const dict = T[currentLang];
+  progressFill.style.width = Math.round(((current+1)/steps.length)*100)+"%";
+  stepLabel.textContent = `${dict.stepLabelPrefix} ${current+1} ${dict.stepLabelJoin} ${steps.length}`;
+  stepNameEl.textContent = dict.stepNames[current];
+}
+
+function render(){
+  steps.forEach((s,i)=> s.classList.toggle('active', i===current));
+  renderStepLabel();
+  prevBtn.style.visibility = current===0 ? 'hidden' : 'visible';
+  nextBtn.textContent = current===steps.length-1 ? T[currentLang].btn_submit : T[currentLang].btn_continue;
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-function next(from) {
-  setTimeout(() => {
-    document.getElementById('step-'+from).classList.remove('active');
-    currentStep = from + 1;
-    document.getElementById('step-'+currentStep).classList.add('active');
-    updateProgress(currentStep);
-    window.scrollTo({top:0, behavior:'smooth'});
-  }, 100);
-}
-
-function back(from) {
-  document.getElementById('step-'+from).classList.remove('active');
-  currentStep = from - 1;
-  document.getElementById('step-'+currentStep).classList.add('active');
-  updateProgress(currentStep);
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-// ===================== DATE DROPDOWNS =====================
-function fillDays(selM, selD, selY) {
-  const m = parseInt(selM.value)||0;
-  const y = parseInt(selY.value)||2000;
-  const days = new Date(y,m,0).getDate()||31;
-  const cur = selD.value;
-  selD.innerHTML = '<option value="">Día</option>';
-  for(let i=1;i<=days;i++) {
-    const v = String(i).padStart(2,'0');
-    selD.innerHTML += `<option${v===cur?' selected':''}>${v}</option>`;
-  }
-}
-
-function fillYears(sel, minY, maxY) {
-  const cur = sel.value;
-  sel.innerHTML = '<option value="">Año</option>';
-  for(let y=maxY;y>=minY;y--) {
-    sel.innerHTML += `<option${String(y)===cur?' selected':''}>${y}</option>`;
-  }
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  const curY = new Date().getFullYear();
-  // Client DOB
-  fillYears(document.getElementById('dob-y'), 1930, curY-1);
-  document.getElementById('dob-m').addEventListener('change', () => fillDays(document.getElementById('dob-m'), document.getElementById('dob-d'), document.getElementById('dob-y')));
-  document.getElementById('dob-y').addEventListener('change', () => fillDays(document.getElementById('dob-m'), document.getElementById('dob-d'), document.getElementById('dob-y')));
-  // Spouse DOB
-  fillYears(document.getElementById('sp-dob-y'), 1930, curY-1);
-  document.getElementById('sp-dob-m').addEventListener('change', () => fillDays(document.getElementById('sp-dob-m'), document.getElementById('sp-dob-d'), document.getElementById('sp-dob-y')));
-  document.getElementById('sp-dob-y').addEventListener('change', () => fillDays(document.getElementById('sp-dob-m'), document.getElementById('sp-dob-d'), document.getElementById('sp-dob-y')));
-  // Today's date
-  const today = new Date();
-  document.getElementById('sign-date').value = (today.getMonth()+1).toString().padStart(2,'0')+'/'+today.getDate().toString().padStart(2,'0')+'/'+today.getFullYear();
-  // Init progress
-  updateProgress(1);
-  // Signature canvas
-  initSig();
+prevBtn.addEventListener('click', ()=>{ if(current>0){current--; render();} });
+nextBtn.addEventListener('click', ()=>{
+  if(current < steps.length-1){ current++; render(); }
+  else { submitForm(); }
 });
 
-// ===================== DEPENDENTS =====================
-let depCount = 0;
-function addDep() {
-  depCount++;
-  const d = document.createElement('div');
-  d.className = 'dep-card';
-  d.id = 'dep-'+depCount;
-  const curY = new Date().getFullYear();
-  let dayOpts = '<option value="">Día</option>';
-  for(let i=1;i<=31;i++) dayOpts += `<option>${String(i).padStart(2,'0')}</option>`;
-  let yearOpts = '<option value="">Año</option>';
-  for(let y=curY;y>=curY-25;y--) yearOpts += `<option>${y}</option>`;
-  let monthOpts = '<option value="">Mes</option>';
-  for(let m=1;m<=12;m++) monthOpts += `<option>${String(m).padStart(2,'0')}</option>`;
+// Repeatable person cards
+let personCount = 0;
+const personsContainer = document.getElementById('personsContainer');
 
-  d.innerHTML = `
-    <div class="dep-num">Dependiente ${depCount}</div>
-    <button class="btn-rm" onclick="removeDep(${depCount})">✕</button>
-    <div class="field"><label>Nombre completo</label><input type="text" placeholder="Nombre completo"/></div>
-    <div class="field"><label>SSN / ITIN</label><input type="text" placeholder="XXX-XX-XXXX" maxlength="11"/></div>
-    <div class="field"><label>Fecha de nacimiento</label>
-      <div class="date-row">
-        <select>${monthOpts}</select>
-        <select>${dayOpts}</select>
-        <select>${yearOpts}</select>
-      </div>
+function applyPersonLabels(card){
+  const dict = T[currentLang];
+  const id = card.dataset.id;
+  card.querySelector('.p-title').textContent = dict.p_title + ' ' + id;
+  card.querySelector('.remove-person').textContent = dict.p_remove;
+  card.querySelectorAll('[data-pk]').forEach(el=>{
+    const key = el.getAttribute('data-pk');
+    if(dict[key] !== undefined) el.textContent = dict[key];
+  });
+  card.querySelector(`[name="p${id}_marital"]`).innerHTML = `
+    <option value="">${dict.opt_select}</option>
+    <option value="Soltero(a)">${dict.marital_single}</option>
+    <option value="Casado(a)">${dict.marital_married}</option>
+    <option value="Divorciado(a)">${dict.marital_divorced}</option>
+    <option value="Viudo(a)">${dict.marital_widowed}</option>
+    <option value="Separado(a)">${dict.marital_separated}</option>
+    <option value="Pareja registrada">${dict.marital_partner}</option>`;
+  card.querySelector(`[name="p${id}_role"]`).innerHTML = `
+    <option value="">${dict.opt_select}</option>
+    <option value="Dueño único">${dict.role_sole}</option>
+    <option value="Cónyuge/pareja registrada">${dict.role_spouse}</option>
+    <option value="Socio general">${dict.role_genPartner}</option>
+    <option value="Socio limitado">${dict.role_limPartner}</option>
+    <option value="Gerente">${dict.role_manager}</option>
+    <option value="Director">${dict.role_director}</option>
+    <option value="Accionista">${dict.role_shareholder}</option>
+    <option value="Oficial">${dict.role_officer}</option>
+    <option value="Miembro LLC">${dict.role_llcMember}</option>`;
+}
+
+function addPerson(){
+  personCount++;
+  const id = personCount;
+  const card = document.createElement('div');
+  card.className = 'person-card';
+  card.dataset.id = id;
+  card.innerHTML = `
+    <button type="button" class="remove-person" onclick="this.closest('.person-card').remove()"></button>
+    <h4 class="p-title"></h4>
+    <div class="field"><label data-pk="p_name"></label><input type="text" name="p${id}_name"></div>
+    <div class="field"><label data-pk="p_prevNames"></label><input type="text" name="p${id}_prevNames"></div>
+    <div class="field"><label data-pk="p_homeAddress"></label><input type="text" name="p${id}_homeAddress"></div>
+    <div class="row2">
+      <div class="field"><label data-pk="p_phone"></label><input type="tel" name="p${id}_phone"></div>
+      <div class="field"><label data-pk="p_email"></label><input type="email" name="p${id}_email"></div>
     </div>
-    <div class="field"><label>Relación</label>
-      <select><option>Hijo(a)</option><option>Stepchild</option><option>Nieto(a)</option><option>Hermano(a)</option><option>Padre/Madre</option><option>Otro</option></select>
+    <div class="row2">
+      <div class="field"><label data-pk="p_dob"></label><input type="date" name="p${id}_dob"></div>
+      <div class="field"><label data-pk="p_pob"></label><input type="text" name="p${id}_pob"></div>
     </div>
-    <div class="field"><label>¿Vivió con usted todo el año?</label>
-      <div class="options">
-        <label class="opt"><input type="radio" name="dep-live-${depCount}" value="si"/><span>Sí</span></label>
-        <label class="opt"><input type="radio" name="dep-live-${depCount}" value="no"/><span>No</span></label>
-      </div>
-    </div>`;
-  document.getElementById('dep-list').appendChild(d);
+    <div class="row2">
+      <div class="field"><label data-pk="p_dl"></label><input type="text" name="p${id}_dl"></div>
+      <div class="field"><label data-pk="p_dlState"></label><input type="text" name="p${id}_dlState"></div>
+    </div>
+    <div class="field"><label data-pk="p_marital"></label><select name="p${id}_marital"></select></div>
+    <div class="field"><label data-pk="p_spouse"></label><input type="text" name="p${id}_spouse"></div>
+    <div class="field"><label data-pk="p_role"></label><select name="p${id}_role"></select></div>
+    <div class="field"><label data-pk="p_percent"></label><input type="text" name="p${id}_percent" placeholder="%"></div>
+    <div class="field"><label data-pk="p_employment"></label><textarea name="p${id}_employment"></textarea></div>
+  `;
+  personsContainer.appendChild(card);
+  applyPersonLabels(card);
+}
+document.getElementById('addPerson').addEventListener('click', addPerson);
+addPerson();
+
+// Officers / directors — structured name + role dropdown rows
+let officerCount = 0;
+const officersContainer = document.getElementById('officersContainer');
+
+function officerRoleOptionsHTML(dict){
+  return `
+    <option value="">${dict.opt_select}</option>
+    <option value="Presidente">${dict.officer_president}</option>
+    <option value="Vicepresidente">${dict.officer_vp}</option>
+    <option value="Secretario">${dict.officer_secretary}</option>
+    <option value="Tesorero">${dict.officer_treasurer}</option>
+    <option value="Director">${dict.officer_director}</option>
+    <option value="CEO">${dict.officer_ceo}</option>
+    <option value="CFO">${dict.officer_cfo}</option>
+    <option value="Miembro LLC">${dict.officer_llcMember}</option>
+    <option value="Otro">${dict.opt_other}</option>`;
 }
 
-function removeDep(n) {
-  const el = document.getElementById('dep-'+n);
-  if (el) el.remove();
+function applyOfficerLabels(row){
+  const dict = T[currentLang];
+  const id = row.dataset.id;
+  row.querySelector(`[name="officer${id}_name"]`).placeholder = dict.officer_namePlaceholder;
+  row.querySelector(`[name="officer${id}_title"]`).innerHTML = officerRoleOptionsHTML(dict);
 }
 
-// ===================== SIGNATURE =====================
-let sigCtx, isDrawing=false;
-function initSig() {
-  const canvas = document.getElementById('sigCanvas');
-  sigCtx = canvas.getContext('2d');
-  sigCtx.lineJoin = 'round';
-  sigCtx.lineCap = 'round';
-
-  canvas.addEventListener('mousedown', e => { isDrawing=true; const r=canvas.getBoundingClientRect(); sigCtx.beginPath(); sigCtx.moveTo(e.clientX-r.left, e.clientY-r.top); });
-  canvas.addEventListener('mousemove', e => { if(!isDrawing) return; const r=canvas.getBoundingClientRect(); sigCtx.lineTo(e.clientX-r.left, e.clientY-r.top); sigCtx.strokeStyle='#1F2937'; sigCtx.lineWidth=2; sigCtx.stroke(); });
-  canvas.addEventListener('mouseup', () => isDrawing=false);
-  canvas.addEventListener('mouseleave', () => isDrawing=false);
-
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); isDrawing=true; const r=canvas.getBoundingClientRect(); const t=e.touches[0]; sigCtx.beginPath(); sigCtx.moveTo(t.clientX-r.left, t.clientY-r.top); }, {passive:false});
-  canvas.addEventListener('touchmove', e => { e.preventDefault(); if(!isDrawing) return; const r=canvas.getBoundingClientRect(); const t=e.touches[0]; sigCtx.lineTo(t.clientX-r.left, t.clientY-r.top); sigCtx.strokeStyle='#1F2937'; sigCtx.lineWidth=2; sigCtx.stroke(); }, {passive:false});
-  canvas.addEventListener('touchend', () => isDrawing=false);
+function addOfficer(){
+  officerCount++;
+  const id = officerCount;
+  const row = document.createElement('div');
+  row.className = 'officer-row';
+  row.dataset.id = id;
+  row.innerHTML = `
+    <input type="text" name="officer${id}_name">
+    <select name="officer${id}_title"></select>
+    <button type="button" class="remove-officer" onclick="this.closest('.officer-row').remove()">&times;</button>
+  `;
+  officersContainer.appendChild(row);
+  applyOfficerLabels(row);
 }
-function clearSig() { sigCtx.clearRect(0,0,400,140); }
+document.getElementById('addOfficer').addEventListener('click', addOfficer);
+addOfficer();
 
-// ===================== SUBMIT =====================
-function submitForm() {
-  if (!document.getElementById('confirmo').checked) {
-    document.getElementById('err-confirmo').style.display='block';
-    return;
-  }
-  document.getElementById('err-confirmo').style.display='none';
-  const num = 'AVT-Q-'+new Date().getFullYear()+'-'+(Math.floor(Math.random()*9000)+1000);
+// File number
+const fileNum = "AVT-ABC-" + new Date().getFullYear() + "-" + String(Math.floor(1000+Math.random()*9000));
+document.getElementById('fileNumber').textContent = fileNum;
 
-  // Helper getters
-  const g = function(id) { var el = document.getElementById(id); return el ? (el.value || '') : ''; };
-  const gr = function(name) { var el = document.querySelector('input[name="'+name+'"]:checked'); return el ? el.value : ''; };
-  const gSel = function(id) { var el = document.getElementById(id); return el ? el.value : ''; };
-
-  var nombre = g('nombre'); var apellido = g('apellido');
-  var telefono = g('telefono'); var email = g('email');
-  var direccion = g('direccion'); var ciudad = g('ciudad');
-  var estado = gSel('estado') || g('estado');
-  var zip = g('zip');
-  var mesNac = gSel('mes-nac'); var diaNac = gSel('dia-nac'); var anioNac = gSel('anio-nac');
-  var fechaNac = mesNac + '/' + diaNac + '/' + anioNac;
-  var anioFiscal = gSel('anio-fiscal') || g('anio-fiscal');
-  var estadoCivil = gr('estado-civil');
-  var estatus = gr('estatus-migratorio');
-  var ingresosExt = gr('ingresos-extranjeros');
-  var cuentasExt = gr('cuentas-extranjeras');
-
-  // Checkboxes
-  var ingresos = [];
-  ['w2','1099nec','1099misc','1099g','1099r','ssa1099','renta','negocio','inversiones','cripto'].forEach(function(id){
-    var el = document.getElementById(id); if(el && el.checked) ingresos.push(el.parentElement.textContent.trim().substring(0,30));
+function collectPersonsSummary(){
+  const dict = T[currentLang];
+  let out = '';
+  document.querySelectorAll('.person-card').forEach((card, idx)=>{
+    const id = card.dataset.id;
+    const get = (suffix)=>{
+      const el = card.querySelector(`[name="p${id}_${suffix}"]`);
+      if(!el) return '';
+      if(el.tagName === 'SELECT') return el.options[el.selectedIndex] ? el.options[el.selectedIndex].textContent.trim() : '';
+      return el.value || '';
+    };
+    const name = get('name');
+    if(!name && !get('percent') && !get('phone')) return;
+    out += `--- ${dict.p_title} ${idx+1} ---\n`;
+    out += `${dict.p_name}: ${name}\n`;
+    out += `${dict.p_prevNames}: ${get('prevNames')}\n`;
+    out += `${dict.p_homeAddress}: ${get('homeAddress')}\n`;
+    out += `${dict.p_phone}: ${get('phone')}\n`;
+    out += `${dict.p_email}: ${get('email')}\n`;
+    out += `${dict.p_dob}: ${get('dob')}\n`;
+    out += `${dict.p_pob}: ${get('pob')}\n`;
+    out += `${dict.p_dl}: ${get('dl')}\n`;
+    out += `${dict.p_dlState}: ${get('dlState')}\n`;
+    out += `${dict.p_marital}: ${get('marital')}\n`;
+    out += `${dict.p_spouse}: ${get('spouse')}\n`;
+    out += `${dict.p_role}: ${get('role')}\n`;
+    out += `${dict.p_percent}: ${get('percent')}\n`;
+    out += `${dict.p_employment}: ${get('employment')}\n\n`;
   });
-  var deducciones = [];
-  ['hipoteca','donaciones','estudiantil','hsa','ira401k','educacion','negocio-ded','oficina','vehiculo','cuidado-hijos','energia','pension'].forEach(function(id){
-    var el = document.getElementById(id); if(el && el.checked) deducciones.push(el.parentElement.textContent.trim().substring(0,30));
+  return out.trim();
+}
+
+function collectOfficersSummary(){
+  let out = '';
+  document.querySelectorAll('.officer-row').forEach(row=>{
+    const nameInput = row.querySelector('input[type=text]');
+    const select = row.querySelector('select');
+    const name = nameInput ? nameInput.value.trim() : '';
+    if(!name) return;
+    const cargo = (select && select.selectedIndex >= 0) ? select.options[select.selectedIndex].textContent.trim() : '';
+    out += `${name} — ${cargo}\n`;
   });
-  var documentos = [];
-  ['doc-w2','doc-1099','doc-id','doc-itin','doc-ss','doc-declaracion','doc-1098','doc-registros','doc-otros'].forEach(function(id){
-    var el = document.getElementById(id); if(el && el.checked) documentos.push(el.parentElement.textContent.trim().substring(0,30));
-  });
+  return out.trim();
+}
 
-  // === GENERATE PDF ===
-  var jsPDF = window.jspdf.jsPDF;
-  var doc = new jsPDF();
-  var pageW = doc.internal.pageSize.getWidth();
-  var y = 20;
-  var lh = 7;
-  var margin = 15;
-  var col2 = 85;
-  var maxW = pageW - col2 - margin;
+function submitForm(){
+  nextBtn.disabled = true;
+  nextBtn.textContent = currentLang==='es' ? 'Enviando…' : 'Sending…';
 
-  // Header background
-  doc.setFillColor(130, 20, 20);
-  doc.rect(0, 0, pageW, 38, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(15);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Avanty Services', margin, 14);
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('T.M. Financial Services LLC - Cuestionario del Cliente', margin, 22);
-  doc.text('No. Confirmacion: ' + num, margin, 30);
-  doc.text('Fecha: ' + new Date().toLocaleDateString('es-US'), pageW - margin, 30, {align:'right'});
+  document.getElementById('expedienteField').value = fileNum;
+  document.getElementById('idiomaField').value = currentLang;
+  document.getElementById('solicitantesField').value = collectPersonsSummary();
+  document.getElementById('oficialesField').value = collectOfficersSummary();
 
-  y = 46;
-  doc.setTextColor(0, 0, 0);
+  const formData = new FormData(form);
+  const body = new URLSearchParams(formData).toString();
 
-  var section = function(title) {
-    if(y > 265) { doc.addPage(); y = 15; }
-    doc.setFillColor(220, 200, 160);
-    doc.rect(margin - 2, y - 5, pageW - 2*margin + 4, 8, 'F');
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(100, 10, 10);
-    doc.text(title, margin, y);
-    doc.setTextColor(0, 0, 0);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    y += lh + 1;
-  };
-
-  var row = function(label, value) {
-    if(y > 275) { doc.addPage(); y = 15; }
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    doc.text(label + ':', margin, y);
-    doc.setFont('helvetica', 'normal');
-    var lines = doc.splitTextToSize(String(value || 'N/A'), maxW);
-    doc.text(lines, col2, y);
-    y += lh * lines.length;
-  };
-
-  section('1. Informacion Personal');
-  row('Nombre completo', nombre + ' ' + apellido);
-  row('Fecha de Nacimiento', fechaNac);
-  row('Telefono', telefono);
-  row('Email', email);
-  row('Direccion', direccion + ', ' + ciudad + ', ' + estado + ' ' + zip);
-  row('Estado Civil', estadoCivil);
-  y += 2;
-
-  section('2. Historial Fiscal');
-  row('Ano fiscal a preparar', anioFiscal);
-  y += 2;
-
-  section('4. Ingresos');
-  row('Tipos de ingreso', ingresos.length ? ingresos.join(', ') : 'Ninguno seleccionado');
-  y += 2;
-
-  section('5. Deducciones y Creditos');
-  row('Deducciones', deducciones.length ? deducciones.join(', ') : 'Ninguna seleccionada');
-  y += 2;
-
-  section('6. Estatus Migratorio');
-  row('Estatus migratorio', estatus);
-  row('Ingresos fuera de EE.UU.', ingresosExt);
-  row('Cuentas fuera de EE.UU.', cuentasExt);
-  y += 2;
-
-  section('7. Documentos Disponibles');
-  row('Documentos', documentos.length ? documentos.join(', ') : 'Ninguno seleccionado');
-  y += 2;
-
-  section('8. Firma Digital');
-  row('Fecha de firma', new Date().toLocaleDateString('es-US'));
-  row('Autorizo preparacion', 'Si');
-
-  // Page footer
-  var pages = doc.internal.getNumberOfPages();
-  for(var p = 1; p <= pages; p++) {
-    doc.setPage(p);
-    doc.setFontSize(7);
-    doc.setTextColor(150, 150, 150);
-    doc.text('Pagina ' + p + ' de ' + pages + '  |  Avanty Services - T.M. Financial Services LLC  |  avantyservices1@gmail.com', pageW/2, 291, {align:'center'});
-  }
-
-  var pdfBase64 = doc.output('datauristring').split(',')[1];
-
-  // === SUBMIT TO NETLIFY FORMS ===
-  var formBody = new URLSearchParams();
-  formBody.append('form-name', 'cuestionario-cliente');
-  formBody.append('nombre', nombre);
-  formBody.append('apellido', apellido);
-  formBody.append('telefono', telefono);
-  formBody.append('email', email);
-  formBody.append('direccion', direccion + ' ' + ciudad + ' ' + estado + ' ' + zip);
-  formBody.append('anio-fiscal', anioFiscal);
-  formBody.append('numero-confirmacion', num);
-  fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:formBody.toString()}).catch(function(e){console.log('Form error:',e);});
-
-  // === SEND EMAIL WITH PDF VIA SERVERLESS FUNCTION ===
-  fetch('/.netlify/functions/send-email', {
+  fetch('/', {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      numero: num,
-      nombre: nombre + ' ' + apellido,
-      telefono: telefono,
-      email: email,
-      anioFiscal: anioFiscal,
-      pdfBase64: pdfBase64
-    })
-  }).then(function(r){ return r.json(); })
-    .then(function(d){ console.log('Email sent:', d); })
-    .catch(function(e){ console.log('Email error:', e); });
-
-  // Show success screen
-  document.getElementById('file-num').textContent = num;
-  document.getElementById('step-8').classList.remove('active');
-  document.getElementById('success-screen').classList.add('active');
-}
-
-// ===================== PRINT / PDF =====================
-function printForm() {
-  // Show all sections for print
-  for(let i=1;i<=8;i++) {
-    const s = document.getElementById('step-'+i);
-    if(s) s.style.display='block';
-  }
-  window.print();
-  setTimeout(() => {
-    for(let i=1;i<=8;i++) {
-      const s = document.getElementById('step-'+i);
-      if(s) { s.style.display=''; if(i===currentStep) s.classList.add('active'); }
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: body
+  })
+  .then((res)=>{
+    if(res.ok){
+      showSuccess(fileNum);
+      sendQuestionnaireEmail(); // no bloquea la pantalla de éxito
+    } else {
+      showSubmitError();
     }
-  }, 1000);
+  })
+  .catch(()=> showSubmitError());
 }
 
-function pdfForm() {
-  const sigDataURL = document.getElementById('sigCanvas').toDataURL();
-  const w = window.open('','_blank');
-  const routingVal = document.getElementById('routing').value;
-  const accountVal = document.getElementById('account').value;
-  const ssnVal = document.getElementById('ssn').value;
-  const routingMasked = routingVal.length > 4 ? '•••••'+routingVal.slice(-4) : routingVal;
-  const accountMasked = accountVal.length > 4 ? '•••••'+accountVal.slice(-4) : accountVal;
-  const ssnMasked = ssnVal.length > 4 ? '•••-••-'+ssnVal.slice(-4) : ssnVal;
-  const today = document.getElementById('sign-date').value;
-  const dobM = document.getElementById('dob-m').value;
-  const dobD = document.getElementById('dob-d').value;
-  const dobY = document.getElementById('dob-y').value;
-  const dobFormatted = (dobM && dobD && dobY) ? dobM+'/'+dobD+'/'+dobY : '';
+function showSubmitError(){
+  nextBtn.disabled = false;
+  nextBtn.textContent = T[currentLang].btn_submit;
+  const msg = currentLang === 'es'
+    ? 'No se pudo enviar el cuestionario por conexión. Por favor intenta de nuevo, o usa el botón "Imprimir / Guardar PDF" para mandarlo por otro medio. (Expediente: ' + fileNum + ')'
+    : 'The questionnaire could not be sent due to a connection issue. Please try again, or use the "Print / Save PDF" button to send it another way. (File: ' + fileNum + ')';
+  alert(msg);
+}
 
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
-  <title>Avanty Services – Cuestionario</title>
-  <style>
-    body{font-family:Arial,sans-serif;max-width:700px;margin:0 auto;padding:20px;color:#1F2937}
-    h1{color:#8B1A1A;font-size:20px;border-bottom:2px solid #C9A84C;padding-bottom:8px}
-    h2{color:#8B1A1A;font-size:15px;margin:16px 0 8px}
-    .row{display:flex;gap:16px;margin-bottom:6px}
-    .field{flex:1;margin-bottom:6px}
-    label{font-size:11px;color:#6B7280;display:block}
-    .val{font-size:13px;font-weight:600;border-bottom:1px solid #e5e7eb;padding:2px 0;min-height:20px}
-    .sig-img{border:1px solid #D1D5DB;border-radius:6px;width:300px;height:80px}
-    .footer{margin-top:24px;font-size:11px;color:#9CA3AF;text-align:center}
-    @media print{button{display:none}}
-  </style></head><body>
-  <h1>Avanty Services – Cuestionario del Cliente</h1>
-  <p style="font-size:12px;color:#6B7280">Fecha: ${today} | ${document.getElementById('file-num').textContent}</p>
-  <h2>Información Personal</h2>
-  <div class="row">
-    <div class="field"><label>Nombre</label><div class="val">${document.getElementById('fname').value} ${document.getElementById('lname').value}</div></div>
-    <div class="field"><label>SSN/ITIN</label><div class="val">${ssnMasked}</div></div>
-  </div>
-  <div class="row">
-    <div class="field"><label>Fecha de nacimiento</label><div class="val">${dobFormatted}</div></div>
-    <div class="field"><label>Teléfono</label><div class="val">${document.getElementById('phone').value}</div></div>
-  </div>
-  <div class="field"><label>Dirección</label><div class="val">${document.getElementById('address').value}, ${document.getElementById('city').value}, ${document.getElementById('state').value} ${document.getElementById('zip').value}</div></div>
-  <h2>Depósito Directo</h2>
-  <div class="row">
-    <div class="field"><label>Banco</label><div class="val">${document.getElementById('bank').value}</div></div>
-    <div class="field"><label>Routing</label><div class="val">${routingMasked}</div></div>
-    <div class="field"><label>Cuenta</label><div class="val">${accountMasked}</div></div>
-  </div>
-  <h2>Firma</h2>
-  <img class="sig-img" src="${sigDataURL}"/>
-  <div class="footer">T.M. Financial Services LLC / Avanty Services | info@avantyservices.com | (818) 000-0000</div>
-  </body></html>`);
-  w.document.close();
-  setTimeout(() => w.print(), 400);
+function showSuccess(fileFromUrl){
+  if(fileFromUrl) document.getElementById('fileNumber').textContent = fileFromUrl;
+  document.getElementById('successFileNumber').textContent = fileFromUrl || fileNum;
+  form.style.display = 'none';
+  document.querySelector('.progress-bar').style.display = 'none';
+  document.querySelector('.file-number').style.display = 'none';
+  successScreen.classList.add('active');
+}
+
+setLang('es');
+render();
+
+// ---------- Print / Save PDF ----------
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fieldRow(fieldEl){
+  const label = fieldEl.querySelector('label');
+  const labelText = label ? label.textContent.trim() : '';
+  const radio = fieldEl.querySelector('input[type=radio]');
+  if(radio){
+    const checked = fieldEl.querySelector('input[type=radio]:checked');
+    if(!checked) return '';
+    const lbl = checked.closest('label');
+    const value = lbl ? lbl.textContent.trim() : checked.value;
+    return `<div class="print-row"><span class="print-label">${escapeHtml(labelText)}</span><span class="print-value">${escapeHtml(value)}</span></div>`;
+  }
+  const input = fieldEl.querySelector('input, select, textarea');
+  if(!input) return '';
+  let value = '';
+  if(input.tagName === 'SELECT'){
+    value = input.options[input.selectedIndex] ? input.options[input.selectedIndex].textContent.trim() : '';
+  } else {
+    value = input.value || '';
+  }
+  if(!value) return '';
+  return `<div class="print-row"><span class="print-label">${escapeHtml(labelText)}</span><span class="print-value">${escapeHtml(value)}</span></div>`;
+}
+
+function fieldsetRows(fs){
+  const legend = fs.querySelector('legend');
+  const legendText = legend ? legend.textContent.trim() : '';
+  const hasNestedFields = fs.querySelector('.field');
+
+  // If the fieldset wraps its questions individually in .field divs
+  // (e.g. multiple radio groups + a textarea, like the Tied-House section),
+  // walk each one instead of collapsing the whole fieldset into one row.
+  if(hasNestedFields){
+    const inner = walkContainer(fs);
+    if(!inner) return '';
+    return `<div class="print-sub">${escapeHtml(legendText)}</div>${inner}`;
+  }
+
+  const radios = fs.querySelectorAll('input[type=radio]');
+  if(radios.length){
+    const checked = fs.querySelector('input[type=radio]:checked');
+    if(!checked) return '';
+    const lbl = checked.closest('label');
+    const value = lbl ? lbl.textContent.trim() : checked.value;
+    return `<div class="print-row"><span class="print-label">${escapeHtml(legendText)}</span><span class="print-value">${escapeHtml(value)}</span></div>`;
+  }
+
+  const checks = fs.querySelectorAll('input[type=checkbox]');
+  if(checks.length){
+    const values = [];
+    checks.forEach(c=>{ if(c.checked){ const lbl=c.closest('label'); values.push(lbl?lbl.textContent.trim():c.value); } });
+    if(!values.length) return '';
+    return `<div class="print-row"><span class="print-label">${escapeHtml(legendText)}</span><span class="print-value">${escapeHtml(values.join(', '))}</span></div>`;
+  }
+
+  return '';
+}
+
+function checklistRow(item){
+  const cb = item.querySelector('input[type=checkbox]');
+  const span = item.querySelector('span');
+  if(cb && cb.checked){
+    return `<div class="print-row"><span class="print-label">✓</span><span class="print-value">${escapeHtml(span ? span.textContent.trim() : '')}</span></div>`;
+  }
+  return '';
+}
+
+function walkContainer(container){
+  let html = '';
+  Array.from(container.children).forEach(child=>{
+    if(child.id === 'officersContainer'){
+      Array.from(child.children).forEach(row=>{
+        const nameInput = row.querySelector('input[type=text]');
+        const select = row.querySelector('select');
+        const name = nameInput ? nameInput.value.trim() : '';
+        if(!name) return;
+        const cargo = (select && select.selectedIndex >= 0) ? select.options[select.selectedIndex].textContent.trim() : '';
+        html += `<div class="print-row"><span class="print-label">${escapeHtml(name)}</span><span class="print-value">${escapeHtml(cargo)}</span></div>`;
+      });
+    } else if(child.classList && child.classList.contains('person-card')){
+      const h4 = child.querySelector('.p-title');
+      html += `<div class="print-sub">${escapeHtml(h4 ? h4.textContent.trim() : '')}</div>`;
+      html += walkContainer(child);
+    } else if(child.classList && child.classList.contains('field')){
+      html += fieldRow(child);
+    } else if(child.tagName === 'FIELDSET'){
+      html += fieldsetRows(child);
+    } else if(child.classList && child.classList.contains('checklist-item')){
+      html += checklistRow(child);
+    } else if(child.children && child.children.length){
+      html += walkContainer(child);
+    }
+  });
+  return html;
+}
+
+function buildPrintBody(){
+  let out = '';
+  document.querySelectorAll('.step').forEach(step=>{
+    const h2 = step.querySelector('h2');
+    const sectionHtml = walkContainer(step);
+    if(!sectionHtml) return;
+    out += `<div class="print-section"><h2>${escapeHtml(h2 ? h2.textContent.trim() : '')}</h2>${sectionHtml}</div>`;
+  });
+  return out;
+}
+
+function fillPrintView(){
+  const dict = T[currentLang];
+  const printView = document.getElementById('printView');
+  printView.innerHTML = '';
+
+  const headerClone = document.querySelector('header').cloneNode(true);
+  const toggle = headerClone.querySelector('.lang-toggle');
+  if(toggle) toggle.remove();
+  printView.appendChild(headerClone);
+
+  const fileDiv = document.createElement('div');
+  fileDiv.className = 'print-file';
+  fileDiv.innerHTML = `${escapeHtml(dict.fileNumLabel)} <b>${escapeHtml(fileNum)}</b>`;
+  printView.appendChild(fileDiv);
+
+  const body = document.createElement('div');
+  body.innerHTML = buildPrintBody();
+  printView.appendChild(body);
+
+  return printView;
+}
+
+function printQuestionnaire(){
+  fillPrintView();
+  window.print();
+}
+
+document.getElementById('printBtn').addEventListener('click', printQuestionnaire);
+document.getElementById('printBtnSuccess').addEventListener('click', printQuestionnaire);
+
+// ---------- Auto-generate PDF + email it (no manual click needed) ----------
+async function generatePdfBase64(){
+  const printView = fillPrintView();
+
+  // Temporarily show it off-screen so html2canvas can measure/render it
+  const prevDisplay = printView.style.display;
+  const prevPosition = printView.style.position;
+  printView.style.display = 'block';
+  printView.style.position = 'fixed';
+  printView.style.left = '-9999px';
+  printView.style.top = '0';
+  printView.style.width = '760px';
+  printView.style.background = '#fff';
+  printView.style.padding = '24px';
+
+  await new Promise(r => setTimeout(r, 50)); // let layout settle
+
+  const canvas = await html2canvas(printView, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+
+  printView.style.display = prevDisplay || '';
+  printView.style.position = prevPosition || '';
+  printView.style.left = '';
+  printView.style.width = '';
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'pt', 'a4');
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const imgWidth = pageWidth;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  const imgData = canvas.toDataURL('image/jpeg', 0.92);
+
+  let heightLeft = imgHeight;
+  let position = 0;
+  pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+  heightLeft -= pageHeight;
+
+  while (heightLeft > 0) {
+    position = heightLeft - imgHeight;
+    pdf.addPage();
+    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+  }
+
+  // Returns base64 without the "data:application/pdf;base64," prefix
+  return pdf.output('datauristring').split(',')[1];
+}
+
+async function sendQuestionnaireEmail(){
+  try{
+    const pdfBase64 = await generatePdfBase64();
+    const dba = (document.querySelector('[name="dba"]')||{}).value || '';
+    const legalName = (document.querySelector('[name="legalName"]')||{}).value || '';
+    const contactEmail = (document.querySelector('[name="contactEmail"]')||{}).value || '';
+
+    await fetch('/api/send-questionnaire-email', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        pdfBase64, fileNum, dba, legalName, contactEmail, lang: currentLang
+      })
+    });
+    // Errores aquí no interrumpen el flujo del usuario — el envío a
+    // Netlify Forms ya se hizo y el expediente ya quedó guardado.
+  }catch(e){
+    console.error('No se pudo enviar el correo con el PDF:', e);
+  }
 }
 </script>
-
-<!-- Netlify Form for email notifications -->
-<form hidden="" method="post" name="cuestionario-cliente"><input type="hidden" name="form-name" value="cuestionario-cliente">
-  <input type="text" name="nombre">
-  <input type="text" name="apellido">
-  <input type="tel" name="telefono">
-  <input type="email" name="email">
-  <input type="text" name="direccion">
-  <input type="text" name="anio-fiscal">
-  <input type="text" name="numero-confirmacion">
-</form>
-
-
-<grammarly-desktop-integration data-grammarly-shadow-root="true" style="visibility: visible !important;"></grammarly-desktop-integration></body></html>
+</body>
+</html>
