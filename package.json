@@ -1,7 +1,4 @@
 {
-  "name": "avanty-cuestionario",
-  "version": "1.0.0",
-  "dependencies": {
-    "nodemailer": "^6.9.9"
-  }
+    "name": "avanty-cuestionario",
+    "version": "1.0.0"
 }
